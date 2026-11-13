@@ -24,6 +24,7 @@ npm run test:e2e       # Playwright, desktop + mobile
 |---|---|
 | `/` · `/ediciones/:slug` · `/ediciones/:slug/:article` | Newspaper front page, edition, article |
 | `/bolsa-lp` · `/power-rankings` · `/juegos` · `/archivo` | LP market, rankings, word game, archive |
+| `/la-voz-del-pastor` | La Voz del Pastor: pastoral archive (faith section, not satire) |
 | `/enviar-noticia` | Corral Press Pass |
 | `/redaccion` | HQ (demo mode only until Phase 2) |
 
@@ -33,7 +34,7 @@ Check the link preview metadata with `curl -s localhost:5173/ | grep og:`.
 [Architecture](docs/ARCHITECTURE.md) · [Design system](docs/DESIGN_SYSTEM.md) · [Security](docs/SECURITY.md) ·
 [Database](docs/DATABASE.md) · [Editorial workflow](docs/EDITORIAL_WORKFLOW.md) · [Creative Studio](docs/CREATIVE_STUDIO.md) ·
 [LP market](docs/LP_MARKET.md) · [Word game](docs/WORD_GAME.md) · [Publishing](docs/PUBLISHING.md) ·
-[Deployment](docs/DEPLOYMENT.md) · [Roadmap](docs/ROADMAP.md)
+[La Voz del Pastor](docs/PASTORAL.md) · [Deployment](docs/DEPLOYMENT.md) · [Roadmap](docs/ROADMAP.md)
 
 ## Branding
 No official logo is in the repo. To add one, put it in `public/brand/` and set `logo.src` in `src/branding/brand.config.ts`.

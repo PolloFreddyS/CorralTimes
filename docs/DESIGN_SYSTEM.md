@@ -7,6 +7,9 @@
 Tokens live in `src/styles/index.css` (`:root` / `[data-mode]`) and are exposed to Tailwind via `@theme inline`.
 Brand constants live in `src/branding/brand.config.ts`.
 
+## Pastoral tone
+`data-tone="pastoral"` re-scopes the tokens for La Voz del Pastor: lighter warm paper (`#F9F0DD`), soft gold rules, no breaking-red accent, larger serif body (`.pastoral-prose`, 1.8 line height), and an ornament divider. The same masthead and typography keep it consistent with the paper.
+
 ## Type
 | Role | Font (self-hosted via @fontsource; no third-party CDN) |
 |---|---|

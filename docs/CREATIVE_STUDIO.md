@@ -30,5 +30,5 @@ Warnings flag missing approved facts, long in-image text and the missing officia
 `asset-manifest.json` and `approved-reference-list.md`. Only approved material is included, and it never references private URLs.
 
 ## Media roles
-COVER 16:9 · ARTICLE_HERO 3:2 · MEME 1:1 · SOCIAL_PREVIEW 1.91:1 (1200×630) · SECTION_BANNER 4:1 · CHARACTER_ASSET 1:1.
+COVER 16:9 · ARTICLE_HERO 3:2 · MEME 1:1 · SOCIAL_PREVIEW 1.91:1 (1200×630) · SECTION_BANNER 4:1 · CHARACTER_ASSET 1:1 · PASTORAL_ILLUSTRATION 3:2 (reverent tone, no satire, no Scripture text in the image — see PASTORAL.md).
 Headlines, names, ranks and LP are typeset in HTML, never trusted to AI-generated image text.

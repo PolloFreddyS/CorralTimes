@@ -16,6 +16,7 @@ Conventions for every table:
 | `editorial_approvals` | Append-only decisions on submissions and articles |
 | `articles` | `edition_id`, `slug` (unique per edition), category, placement, `status article_status`, `body jsonb` (validated by `articleDocSchema`), SEO fields |
 | `article_revisions` | Every saved body/title change |
+| `article_pastoral_details` | 1:1 with `articles` where `category = 'PASTORAL'`: Bible reference (book code, chapter, verse range), translation, passage mode + exact text, theme, applications, prayer invitation + privacy declaration, verification (`verified_by` admin UUID, `verified_at`, source). Trigger: a published pastoral article requires a verified quotation. See PASTORAL.md. |
 | `article_sources` | Article ↔ submission references (many-to-many) |
 | `characters` | Recurring community personalities (Creative Bible registry) |
 | `media_assets` / `media_revisions` | Original (private) + derivatives (public after approval), role, dimensions, alt, caption, source label, approval status |

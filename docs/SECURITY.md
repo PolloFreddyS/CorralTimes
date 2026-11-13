@@ -26,6 +26,7 @@ who can craft any request, upload hostile files, scrape public APIs and brute-fo
 | T14 | Stale cache exposes unpublished content | Public HTML is `no-cache` today. Phase 5 adds edge caching keyed on snapshot version, purged on publish/unpublish | 🟡 |
 | T15 | Unsafe GitHub workflows | `permissions: contents: read`, no `pull_request_target`, no secrets in CI, gitleaks, Dependabot | ✅ |
 | T16 | Clickjacking / sniffing | CSP `frame-ancestors 'none'`, XFO, nosniff, HSTS, Permissions-Policy, COOP on assets and Worker HTML | ✅ e2e |
+| T18 | Misquoted Scripture or exposure of private prayer requests | Human verification required for quotations, `toPublicPastoralDetails` refuses unverified quotations, paraphrases labeled, translation notice, prayer-privacy declaration; verifier identity not public | ✅ tests |
 | T17 | Over-collection | No reader accounts or tracking. Word-game progress stays in localStorage. Contributor alias is unverified. IP kept only as an expiring salted hash. | ✅ / ⏳ P3 |
 
 ## Indexing

@@ -5,7 +5,7 @@ _Last updated: 2026-11-13 · branch `claude/corral-times-hq-v1-krfiin`_
 ## Phase 0 — Inspection ✅
 Repo assessed (v1 foundation kept, no official logo found). Architecture is in `ARCHITECTURE.md`.
 
-## Phase 1 — Visual foundation ✅ (review checkpoint)
+## Phase 1 — Visual foundation ✅
 
 **Public newspaper.** Data comes from the Worker; locally it is demo content, labeled as such.
 - [x] `/` front page in the spec §7 order: masthead, date strip, breaking strip, lead + cover slot, secondary grid, LP summary, Power Rankings, meme, quote, word game, rumors/briefs, share, prev/next, footer
@@ -27,6 +27,15 @@ Repo assessed (v1 foundation kept, no official logo found). Architecture is in `
 **Tests.** 98 Vitest (unit/integration/security) + 20 Playwright (desktop and mobile) passing. Bundle scan clean, including the puzzle-answer check.
 
 **Not functional yet.** These are buttons shown disabled with a phase label: saving, auth, uploads, publishing, imports, puzzle configuration, OpenAI.
+
+## Addendum — La Voz del Pastor ✅ (review checkpoint)
+- [x] Bible references: 66 books (1,189 chapters), Spanish names/abbreviations, parser + errors, translation registry with license
+- [x] Pastoral column = article `category: PASTORAL` + structured details (no duplicate content system); `scripture` block (quotation vs paraphrase)
+- [x] Rules in code: quotation needs human verification + source; paraphrase may not use quotes; verse cap for copyrighted translations; prayer privacy declaration; unverified quotation can't reach the public contract
+- [x] Public: front-page band (separate from satire), full column with applications, prayer invitation, translation notice; `/la-voz-del-pastor` archive filterable by book/theme/year; own OG metadata
+- [x] HQ: **Mesa Pastoral** (live validation, book autocomplete, preview = the public component, archive), nav entry
+- [x] Readiness: pastoral check (optional; blocker if unapproved/unverified) · Creative Studio: `PASTORAL_ILLUSTRATION` with reverent tone rules
+- [x] Tests: 121 Vitest + 22 Playwright passing
 
 ## Phase 2+
 Not started. See `ROADMAP.md`.

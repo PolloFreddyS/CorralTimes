@@ -23,5 +23,8 @@ Images use the approved `SOCIAL_PREVIEW` asset, then the cover, then `/social/og
 **Testing link previews:** `curl -s https://<host>/ediciones/<slug> | grep og:`. After deploying, use the
 Facebook Sharing Debugger (WhatsApp uses the same OG fields). WhatsApp caches previews aggressively, so append `?v=2` to re-test.
 
+## La Voz del Pastor
+The pastoral column is published only as part of an edition snapshot, after approval and passage verification (a readiness blocker otherwise). Its archive URL is `/la-voz-del-pastor`.
+
 ## WhatsApp
 Sending is manual: copy the message and paste it into the group. There is no WhatsApp Business API. Readers share with `wa.me` links.
