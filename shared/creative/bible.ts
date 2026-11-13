@@ -14,6 +14,8 @@ export interface CreativeBible {
   editorialRules: string[];
   prohibited: string[];
   logo: { status: 'OFFICIAL' | 'PENDING'; notes: string };
+  /** Reglas de tono para LA VOZ DEL PASTOR: reemplazan las reglas de humor en sus briefs. */
+  pastoral: { tone: string[]; prohibited: string[] };
   characters: { name: string; description: string; approvedAssetIds: string[] }[];
 }
 
@@ -65,6 +67,19 @@ export const CREATIVE_BIBLE_V1: CreativeBible = {
   ],
   logo: { status: 'PENDING', notes: 'No hay logo oficial en el repositorio. Usar solo la cabecera tipográfica temporal.' },
   characters: [],
+  pastoral: {
+    tone: [
+      'Espacio de fe y reflexión: tono cálido, reverente y contemplativo. Sin sátira ni chistes gamer.',
+      'Ilustración bíblica o simbólica con luz cálida, papel crema y acentos dorados sutiles.',
+      'Composición limpia y serena que deje respirar el texto del versículo, que se compone en HTML.',
+    ],
+    prohibited: [
+      'Caricaturizar o ridiculizar a Dios, Jesús, figuras bíblicas o símbolos de la fe.',
+      'Mezclar memes, rangos, LP o humor del Corral con el mensaje devocional.',
+      'Escribir el texto bíblico dentro de la imagen (el versículo se muestra en HTML para garantizar exactitud).',
+      'Inventar versículos o referencias bíblicas.',
+    ],
+  },
 };
 
 export function bibleToMarkdown(b: CreativeBible): string {
@@ -79,6 +94,7 @@ export function bibleToMarkdown(b: CreativeBible): string {
     `## Reglas editoriales\n${list(b.editorialRules)}`,
     `## Prohibido\n${list(b.prohibited)}`,
     `## Logo\n${b.logo.status === 'OFFICIAL' ? 'Oficial' : 'Pendiente'} — ${b.logo.notes}`,
+    `## La Voz del Pastor (tono)\n${list(b.pastoral.tone)}\n\n### Prohibido en la sección pastoral\n${list(b.pastoral.prohibited)}`,
     `## Personajes registrados\n${b.characters.length ? b.characters.map((c) => `- **${c.name}**: ${c.description}`).join('\n') : '_Ninguno registrado todavía._'}`,
   ].join('\n\n');
 }

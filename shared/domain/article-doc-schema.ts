@@ -23,6 +23,19 @@ export const blockSchema = z.discriminatedUnion('type', [
   z.object({ type: z.literal('heading'), attrs: z.object({ level: z.union([z.literal(2), z.literal(3)]) }), content: inline }),
   /** Cita textual: `text` se conserva EXACTA (sin marcas, sin edición satírica). */
   z.object({ type: z.literal('quote'), attrs: z.object({ text: z.string().min(1).max(2000), attribution: z.string().max(200) }) }),
+  /**
+   * Pasaje bíblico. `quotation` = texto literal de la traducción (se muestra entre comillas con referencia);
+   * `paraphrase` = resumen propio (se etiqueta como paráfrasis, sin comillas). Nunca se mezclan.
+   */
+  z.object({
+    type: z.literal('scripture'),
+    attrs: z.object({
+      mode: z.enum(['quotation', 'paraphrase']),
+      text: z.string().min(1).max(4000),
+      reference: z.string().min(3).max(80),
+      translation: z.string().min(2).max(20),
+    }),
+  }),
   z.object({ type: z.literal('callout'), attrs: z.object({ tone: z.enum(['info', 'breaking', 'rumor']), title: z.string().max(120) }), content: inline }),
   z.object({ type: z.literal('bulletList'), content: z.array(inline).max(50) }),
   z.object({

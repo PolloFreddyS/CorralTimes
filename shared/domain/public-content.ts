@@ -1,4 +1,5 @@
 import type { ArticleDoc } from './article-doc';
+import type { PastoralDetails } from './pastoral';
 import type { LpQueue, DataQuality } from './lp';
 import type { ArtworkSource, MediaRole } from './workflow';
 
@@ -18,7 +19,7 @@ export interface PublicArtwork {
   source: ArtworkSource;
 }
 
-export type ArticleCategory = 'NOTICIA' | 'INVESTIGACION' | 'RANKED' | 'POKEMON' | 'COMUNIDAD' | 'OPINION' | 'EVENTO';
+export type ArticleCategory = 'NOTICIA' | 'INVESTIGACION' | 'RANKED' | 'POKEMON' | 'COMUNIDAD' | 'OPINION' | 'EVENTO' | 'PASTORAL';
 export const ARTICLE_CATEGORY_LABELS: Record<ArticleCategory, string> = {
   NOTICIA: 'Noticias',
   INVESTIGACION: 'Investigación',
@@ -27,6 +28,7 @@ export const ARTICLE_CATEGORY_LABELS: Record<ArticleCategory, string> = {
   COMUNIDAD: 'Comunidad',
   OPINION: 'Opinión',
   EVENTO: 'Eventos',
+  PASTORAL: 'La Voz del Pastor',
 };
 
 export type ArticlePlacement = 'LEAD' | 'SECONDARY' | 'BRIEF';
@@ -46,6 +48,33 @@ export interface PublicArticleSummary {
 export interface PublicArticle extends PublicArticleSummary {
   body: ArticleDoc;
   publishedAt: string;
+  /** Solo en artículos PASTORAL. Se publica únicamente con el pasaje verificado y la columna aprobada. */
+  pastoral?: PublicPastoralDetails;
+}
+
+/** Detalles públicos de la columna pastoral (sin datos internos de verificación como quién verificó). */
+export type PublicPastoralDetails = Omit<PastoralDetails, 'verification' | 'prayerPrivacy'> & { referenceLabel: string; translationName: string; translationNotice: string };
+
+/** Avance de la columna en la portada de la edición. */
+export interface PublicPastoralPreview {
+  articleSlug: string;
+  title: string;
+  subtitle: string;
+  excerpt: string;
+  details: PublicPastoralDetails;
+  artwork: PublicArtwork | null;
+}
+
+/** Entrada del archivo pastoral (buscable por libro, tema y fecha). */
+export interface PublicPastoralArchiveEntry {
+  editionSlug: string;
+  editionNumber: number;
+  publicationDate: string;
+  articleSlug: string;
+  title: string;
+  referenceLabel: string;
+  bookCode: string;
+  theme: string;
 }
 
 export interface PublicLpEntry {
@@ -113,6 +142,7 @@ export interface PublicEdition extends PublicEditionSummary {
   rumors: PublicRumor[];
   briefs: string[];
   puzzle: { id: string; available: boolean } | null;
+  pastoral: PublicPastoralPreview | null;
   previous: { slug: string; number: number } | null;
   next: { slug: string; number: number } | null;
   /** true solo para contenido ficticio de desarrollo. La UI muestra un aviso visible. */

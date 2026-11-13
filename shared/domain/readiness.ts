@@ -14,6 +14,8 @@ export interface ReadinessCheck {
 
 export type LpSnapshotState = 'NONE' | 'DRAFT' | 'PENDING_APPROVAL' | 'APPROVED' | 'FROZEN';
 export type RankingState = 'NONE' | 'DRAFT' | 'FINAL';
+/** Columna pastoral: opcional, pero si está en la edición debe estar aprobada y con pasaje verificado. */
+export type PastoralState = 'NONE' | 'DRAFT' | 'APPROVED';
 
 export interface EditionReadinessInput {
   hasEditionNumber: boolean;
@@ -31,6 +33,8 @@ export interface EditionReadinessInput {
   rankingHasDuplicatePositions: boolean;
   attachmentsMissing: number;
   estimatedPages: number;
+  pastoralState: PastoralState;
+  pastoralPassageVerified: boolean;
 }
 
 export function evaluateReadiness(e: EditionReadinessInput): ReadinessCheck[] {
@@ -99,6 +103,15 @@ export function evaluateReadiness(e: EditionReadinessInput): ReadinessCheck[] {
       ? 'Hay posiciones duplicadas.'
       : { NONE: 'Sin Power Ranking esta semana (sección opcional).', DRAFT: 'Ranking en borrador.', FINAL: 'Ranking final.' }[e.rankingState],
   );
+  if (e.pastoralState === 'NONE') {
+    push('pastoral', 'La Voz del Pastor', 'info', 'Sin columna pastoral esta semana (sección opcional).');
+  } else if (e.pastoralState === 'DRAFT') {
+    push('pastoral', 'La Voz del Pastor', 'blocker', 'La columna pastoral está en la edición pero no ha sido aprobada.');
+  } else if (!e.pastoralPassageVerified) {
+    push('pastoral', 'La Voz del Pastor', 'blocker', 'El pasaje bíblico no ha sido verificado contra su traducción.');
+  } else {
+    push('pastoral', 'La Voz del Pastor', 'ok', 'Columna aprobada y pasaje verificado.');
+  }
   if (e.attachmentsMissing > 0) {
     push('attachments', 'Adjuntos', 'warning', `${e.attachmentsMissing} adjuntos no están disponibles.`);
   }

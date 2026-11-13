@@ -36,6 +36,10 @@ export function docToPlainText(doc: ArticleDoc): string {
           return inlineText(b.content);
         case 'quote':
           return `“${b.attrs.text}” — ${b.attrs.attribution}`;
+        case 'scripture':
+          return b.attrs.mode === 'quotation'
+            ? `“${b.attrs.text}” (${b.attrs.reference}, ${b.attrs.translation})`
+            : `Paráfrasis de ${b.attrs.reference}: ${b.attrs.text}`;
         case 'bulletList':
           return b.content.map(inlineText).join('\n');
         case 'table':

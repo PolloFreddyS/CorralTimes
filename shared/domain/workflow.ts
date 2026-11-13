@@ -49,7 +49,7 @@ export const canTransitionEdition = (from: EditionStatus, to: EditionStatus) => 
 /** Lo único que el público puede ver. */
 export const PUBLICLY_VISIBLE_EDITION_STATUSES: readonly EditionStatus[] = ['PUBLISHED', 'ARCHIVED'];
 
-export const MEDIA_ROLES = ['COVER', 'ARTICLE_HERO', 'MEME', 'SOCIAL_PREVIEW', 'SECTION_BANNER', 'CHARACTER_ASSET'] as const;
+export const MEDIA_ROLES = ['COVER', 'ARTICLE_HERO', 'MEME', 'SOCIAL_PREVIEW', 'SECTION_BANNER', 'CHARACTER_ASSET', 'PASTORAL_ILLUSTRATION'] as const;
 export type MediaRole = (typeof MEDIA_ROLES)[number];
 export const MEDIA_ROLE_SPECS: Record<MediaRole, { label: string; aspect: string; width: number; height: number }> = {
   COVER: { label: 'Portada', aspect: '16:9', width: 1920, height: 1080 },
@@ -58,6 +58,7 @@ export const MEDIA_ROLE_SPECS: Record<MediaRole, { label: string; aspect: string
   SOCIAL_PREVIEW: { label: 'Vista previa WhatsApp / Open Graph', aspect: '1.91:1', width: 1200, height: 630 },
   SECTION_BANNER: { label: 'Banner de sección', aspect: '4:1', width: 1600, height: 400 },
   CHARACTER_ASSET: { label: 'Personaje', aspect: '1:1', width: 1024, height: 1024 },
+  PASTORAL_ILLUSTRATION: { label: 'Ilustración pastoral', aspect: '3:2', width: 1536, height: 1024 },
 };
 
 export type ArtworkSource = 'CHATGPT' | 'OPENAI_API' | 'UPLOAD';
