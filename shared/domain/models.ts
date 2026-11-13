@@ -7,7 +7,8 @@ import type { SubmissionCategory, SubmissionStatus } from './submission';
  * Los IDs públicos son UUID opacos; nunca exponemos IDs secuenciales.
  */
 
-export type EditionStatus = 'PLANNING' | 'OPEN' | 'LOCKED' | 'CLOSED' | 'REOPENED';
+export type { EditionStatus } from './workflow';
+import type { EditionStatus } from './workflow';
 
 export type VerificationStatus = 'UNVERIFIED' | 'PARTIALLY_VERIFIED' | 'VERIFIED' | 'DISPUTED';
 
