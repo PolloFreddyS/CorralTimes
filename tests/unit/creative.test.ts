@@ -1,10 +1,10 @@
 import { describe, expect, it } from 'vitest';
-import { bibleToMarkdown, CREATIVE_BIBLE_V1 } from '@shared/creative/bible';
+import { bibleToMarkdown, CREATIVE_BIBLE_SEED } from '@shared/creative/bible';
 import { briefWarnings, buildCreativeBrief, type BriefInput } from '@shared/creative/brief';
 import { buildWhatsAppAnnouncement, whatsappShareUrl } from '@shared/creative/whatsapp';
 
 const base: BriefInput = {
-  bible: CREATIVE_BIBLE_V1,
+  bible: CREATIVE_BIBLE_SEED,
   role: 'COVER',
   edition: { number: 7, publicationDate: '2026-11-13', headline: 'TITULAR APROBADO' },
   article: { title: 'Artículo', summary: 'Resumen', approvedFacts: ['Hecho aprobado 1'] },
@@ -40,7 +40,7 @@ describe('Creative Studio — brief para ChatGPT', () => {
     expect(w).toContain('LOGO_PENDING');
   });
   it('la biblia se exporta a Markdown sin noticias', () => {
-    const md = bibleToMarkdown(CREATIVE_BIBLE_V1);
+    const md = bibleToMarkdown(CREATIVE_BIBLE_SEED);
     expect(md).toContain('# Corral Creative Bible v1.0.0');
     expect(md).toContain('#A73429');
   });

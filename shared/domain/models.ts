@@ -1,5 +1,5 @@
 import type { DataQuality, LpQueue } from './lp';
-import type { LpSnapshotState, PastoralState, RankingState } from './readiness';
+import type { LpSnapshotState, PastoralState, PuzzleState, RankingState } from './readiness';
 import type { SubmissionCategory, SubmissionStatus } from './submission';
 
 /**
@@ -24,6 +24,8 @@ export interface Edition {
   rankingState: RankingState;
   pastoralState: PastoralState;
   pastoralPassageVerified: boolean;
+  coverArtworkApproved: boolean;
+  puzzleState: PuzzleState;
 }
 
 export interface SubmissionSummary {

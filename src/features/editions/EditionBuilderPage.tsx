@@ -6,10 +6,7 @@ import { ErrorState, LoadingRows } from '@/components/layout/QueryState';
 import { editionQuery, lpRowsQuery, rankingQuery, storiesQuery } from '@/lib/demo-queries';
 import { estimatePages } from '@shared/domain/readiness';
 
-/**
- * La Imprenta: vista previa de la jerarquía editorial en modo periódico.
- * No es un render "pixel-perfect" del resultado final de ChatGPT.
- */
+/** La Imprenta: organización de la edición digital (orden de artículos y secciones). */
 export function EditionBuilderPage() {
   const edition = useQuery(editionQuery);
   const stories = useQuery(storiesQuery);
@@ -27,7 +24,7 @@ export function EditionBuilderPage() {
 
   return (
     <div>
-      <PageHeader kicker="La Imprenta" title="Armado de la edición" description="Vista previa de la jerarquía editorial. El diseño final lo produce ChatGPT con el prompt del viernes." />
+      <PageHeader kicker="La Imprenta" title="Armado de la edición" description="Organiza artículos y secciones de la edición digital. Lo que ves aquí es la jerarquía que se publicará en el sitio." />
       <PhaseNotice phase={5}>Asignación, reordenamiento, bloqueo y revisiones de la edición se habilitan en la Fase 5.</PhaseNotice>
       {pages > 1 && (
         <p role="status" className="mt-3 flex items-center gap-2 border-2 border-gold px-3 py-2 text-sm"><AlertTriangle aria-hidden className="size-4 text-gold" />Esta edición probablemente necesite Página 2.</p>

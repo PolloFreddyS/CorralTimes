@@ -25,6 +25,8 @@ export const demoEdition: Edition = {
   rankingState: 'DRAFT',
   pastoralState: 'APPROVED',
   pastoralPassageVerified: true,
+  coverArtworkApproved: false,
+  puzzleState: 'READY',
 };
 
 export const demoSubmissions: SubmissionSummary[] = [

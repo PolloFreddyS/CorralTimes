@@ -40,7 +40,7 @@ export function createApp(deps: AppDeps) {
     }),
   );
 
-  api.get('/health', (c) => c.json({ ok: true, service: 'corral-times-hq', env: c.env.APP_ENV }));
+  api.get('/health', (c) => c.json({ ok: true, service: 'corral-times', version: '2.0.0', env: c.env.APP_ENV }));
 
   api.get('/public/intake-status', (c) => {
     const mode = parseIntakeMode(c.env.INTAKE_MODE);

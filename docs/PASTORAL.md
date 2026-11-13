@@ -39,7 +39,7 @@ quotation terms (and the exact notice wording) and adjust `BIBLE_TRANSLATIONS`.
 ## Prayer & privacy
 The prayer invitation is general. Approval requires declaring either that it contains no private requests, or that the person
 gave explicit permission (consent recorded). The public contract omits the privacy flag and the verifier's identity. There is no
-reader account and no prayer-request intake in v1.
+reader account and no prayer-request intake in this release.
 
 ## Public experience
 * **Front page band:** placed right after the lead story, in a distinct warm style, showing the verse + reference + translation,

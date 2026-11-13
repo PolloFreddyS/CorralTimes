@@ -19,7 +19,7 @@ export interface CreativeBible {
   characters: { name: string; description: string; approvedAssetIds: string[] }[];
 }
 
-export const CREATIVE_BIBLE_V1: CreativeBible = {
+export const CREATIVE_BIBLE_SEED: CreativeBible = {
   version: '1.0.0',
   identity: {
     name: 'EL CORRAL TIMES',

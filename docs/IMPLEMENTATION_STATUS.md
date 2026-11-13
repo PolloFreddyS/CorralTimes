@@ -1,9 +1,9 @@
-# Implementation status
+# Implementation status — EL CORRAL TIMES 2.0
 
 _Last updated: 2026-11-13 · branch `claude/corral-times-hq-v1-krfiin`_
 
 ## Phase 0 — Inspection ✅
-Repo assessed (v1 foundation kept, no official logo found). Architecture is in `ARCHITECTURE.md`.
+Repo assessed (earlier prototype absorbed into 2.0, no official logo found). Architecture is in `ARCHITECTURE.md`.
 
 ## Phase 1 — Visual foundation ✅
 
@@ -22,7 +22,7 @@ Repo assessed (v1 foundation kept, no official logo found). Architecture is in `
 - [x] 12-module navigation in Spanish
 - [x] Creative Studio: working ChatGPT brief generator + Creative Bible export
 - [x] Publication Center: working readiness checklist + WhatsApp announcement generator
-- [x] Palabrero admin shell, plus the v1 modules (inbox, desk, imprenta, LP, rankings, caos, hemeroteca, security)
+- [x] Palabrero admin shell, plus inbox, desk, imprenta, LP, rankings, caos, hemeroteca and security shells
 
 **Tests.** 98 Vitest (unit/integration/security) + 20 Playwright (desktop and mobile) passing. Bundle scan clean, including the puzzle-answer check.
 
@@ -35,7 +35,13 @@ Repo assessed (v1 foundation kept, no official logo found). Architecture is in `
 - [x] Public: front-page band (separate from satire), full column with applications, prayer invitation, translation notice; `/la-voz-del-pastor` archive filterable by book/theme/year; own OG metadata
 - [x] HQ: **Mesa Pastoral** (live validation, book autocomplete, preview = the public component, archive), nav entry
 - [x] Readiness: pastoral check (optional; blocker if unapproved/unverified) · Creative Studio: `PASTORAL_ILLUSTRATION` with reverent tone rules
-- [x] Tests: 121 Vitest + 22 Playwright passing
+- [x] Tests: 122 Vitest + 22 Playwright passing
+
+## V2 consolidation ✅
+- [x] Product identity is 2.0 everywhere (package `corral-times@2.0.0`, Worker `corral-times`, page titles)
+- [x] V1 "close edition → prompt for a newspaper image" panel removed; La Redacción shows V2 publication readiness linking to the Centro de Publicación
+- [x] Readiness includes V2 checks: approved cover artwork, El Palabrero, La Voz del Pastor
+- [x] HQ phase labels follow the V2 roadmap
 
 ## Phase 2+
 Not started. See `ROADMAP.md`.

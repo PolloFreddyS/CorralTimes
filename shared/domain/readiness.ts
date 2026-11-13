@@ -16,6 +16,7 @@ export type LpSnapshotState = 'NONE' | 'DRAFT' | 'PENDING_APPROVAL' | 'APPROVED'
 export type RankingState = 'NONE' | 'DRAFT' | 'FINAL';
 /** Columna pastoral: opcional, pero si está en la edición debe estar aprobada y con pasaje verificado. */
 export type PastoralState = 'NONE' | 'DRAFT' | 'APPROVED';
+export type PuzzleState = 'NONE' | 'DRAFT' | 'READY';
 
 export interface EditionReadinessInput {
   hasEditionNumber: boolean;
@@ -35,6 +36,9 @@ export interface EditionReadinessInput {
   estimatedPages: number;
   pastoralState: PastoralState;
   pastoralPassageVerified: boolean;
+  /** Portada oficial (ChatGPT) subida y aprobada. */
+  coverArtworkApproved: boolean;
+  puzzleState: PuzzleState;
 }
 
 export function evaluateReadiness(e: EditionReadinessInput): ReadinessCheck[] {
@@ -103,6 +107,17 @@ export function evaluateReadiness(e: EditionReadinessInput): ReadinessCheck[] {
       ? 'Hay posiciones duplicadas.'
       : { NONE: 'Sin Power Ranking esta semana (sección opcional).', DRAFT: 'Ranking en borrador.', FINAL: 'Ranking final.' }[e.rankingState],
   );
+  push(
+    'cover',
+    'Arte de portada',
+    e.coverArtworkApproved ? 'ok' : 'warning',
+    e.coverArtworkApproved ? 'Portada oficial aprobada.' : 'Falta la portada oficial aprobada (se mostrará un espacio reservado).',
+  );
+  push('puzzle', 'El Palabrero', e.puzzleState === 'READY' ? 'ok' : e.puzzleState === 'NONE' ? 'info' : 'warning', {
+    NONE: 'Sin palabrero esta semana (sección opcional).',
+    DRAFT: 'Palabrero configurado pero no activado.',
+    READY: 'Palabrero listo.',
+  }[e.puzzleState]);
   if (e.pastoralState === 'NONE') {
     push('pastoral', 'La Voz del Pastor', 'info', 'Sin columna pastoral esta semana (sección opcional).');
   } else if (e.pastoralState === 'DRAFT') {

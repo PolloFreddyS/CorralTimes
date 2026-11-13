@@ -22,7 +22,7 @@ Brand constants live in `src/branding/brand.config.ts`.
 ## Newspaper components
 `NewspaperMasthead`, `BreakingNewsBanner`, `EditorialStamp`, `StoryCard`, `QuoteCard` (exact text label),
 `RumorLabel` (always visible, not color-only), `PlayerRankCard`, `LPMarketTicker` (reduced-motion safe, with an
-sr-only list), `EditionStatus`, `EditorialChecklist`, `FridayExportPanel`, `EvidenceViewer`, `SecurityEventList`,
+sr-only list), `EditionStatus`, `EditorialChecklist`, `PublicationReadinessPanel`, `EvidenceViewer`, `SecurityEventList`,
 `ArtworkSlot` (honest "pending official art" halftone placeholder with reserved aspect ratio), `ArticleBody`,
 `ShareButtons`, `SectionNav`/`SiteFooter`.
 

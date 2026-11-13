@@ -1,8 +1,8 @@
 {
-  "name": "corral-times-hq",
+  "name": "corral-times",
   "private": true,
-  "version": "0.1.0",
-  "description": "EL CORRAL TIMES HQ — la redacción interna de Los Gallos Sin Planes",
+  "version": "2.0.0",
+  "description": "EL CORRAL TIMES 2.0 — periódico digital y redacción (Corral Times HQ) de Los Gallos Sin Planes",
   "type": "module",
   "engines": {
     "node": ">=22.12"

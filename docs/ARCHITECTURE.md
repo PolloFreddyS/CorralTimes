@@ -6,7 +6,7 @@
 
 | Item | Finding |
 |---|---|
-| Prior work | The v1 Phase 0/1 foundation was already on this branch: React/Vite SPA, Hono Worker, design system and HQ shells. It was **extended, not replaced**. |
+| Product version | **EL CORRAL TIMES 2.0** is the target and only product. An earlier internal-newsroom prototype (prompt-export only) was absorbed into it: its Worker, security and design system were kept, and its export-to-image flow was replaced by the digital newspaper. |
 | Official logo / assets | **None in the repo.** A temporary typographic masthead and a typographic social card are used. Replacement points: `src/branding/brand.config.ts` and `public/social/`. |
 | Deployment workflows | CI only (`.github/workflows/ci.yml`). There is no deploy workflow, by design. |
 | Branch | Work continues on `claude/corral-times-hq-v1-krfiin`. The session's tooling only allows this branch. It can be renamed to `feature/corral-times-2` when the PR is opened. |
@@ -51,7 +51,7 @@ full text, and edge caching of published snapshots will be added with purge-on-p
 ```
 shared/domain/     workflow.ts (state machines, media roles) · submission(+schema) · article-doc(+schema)
                    public-content.ts (read contract, slugs) · palabrero.ts · lp.ts · readiness.ts · edition-calendar.ts
-shared/creative/   bible.ts (Creative Bible v1) · brief.ts (ChatGPT briefs) · whatsapp.ts
+shared/creative/   bible.ts (Creative Bible seed) · brief.ts (ChatGPT briefs) · whatsapp.ts
 worker/            app.ts · api/public.ts · auth/ · html/ (meta, headers, pages) · content/ · puzzles/ · demo/
 src/               app/ (router, theme, gates) · components/{editorial,newspaper,charts,ui,layout}
                    features/{public,press-pass,palabrero,creative,publication,dashboard,submissions,stories,
@@ -61,8 +61,8 @@ src/               app/ (router, theme, gates) · components/{editorial,newspape
 Schemas are kept in separate files (`*-schema.ts`) so that Zod is not loaded on the public front page.
 
 ## 5. Dependency decisions
-These are unchanged from v1 (React 19.3, TS 6.0 strict, Vite 8, Tailwind 4.3, Hono 4, TanStack Query 5,
-RHF 7 + Zod 4, Vitest 5, Playwright 1.63). **Nothing new was added in v2.** Charts are hand-built in SVG/HTML,
+Stack: React 19.3, TS 6.0 strict, Vite 8, Tailwind 4.3, Hono 4, TanStack Query 5,
+RHF 7 + Zod 4, Vitest 5, Playwright 1.63). No dependencies beyond the base stack were added. Charts are hand-built in SVG/HTML,
 and the social card is rendered by a script with the Playwright already used for tests.
 
 Additions planned for later phases:

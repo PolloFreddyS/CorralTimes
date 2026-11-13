@@ -6,7 +6,7 @@ This is an original five-letter word game. It uses none of Wordle's branding, ar
 * **Normalization:** uppercase; accents and diaeresis removed; **Ñ is its own letter**; only A–Z and Ñ allowed.
 * **Accessibility:** feedback uses color + icon + dashed border (✓ correct, ◉ present, – absent). Every cell and key has an ARIA label.
   It works with a physical keyboard and an on-screen keyboard (with Ñ).
-* **Privacy:** no accounts. Progress is stored only in `localStorage` under `ct:palabrero:v1:<puzzleId>`
+* **Privacy:** no accounts. Progress is stored only in `localStorage` under `ct:palabrero:<puzzleId>`
   (edition-specific). It contains guesses and feedback, never the answer.
 * **Sharing:** an emoji grid plus the score and URL. No letters are included.
 

@@ -29,7 +29,7 @@ export function LpMarketPage() {
         actions={
           <>
             <Button variant="gold" size="sm" onClick={() => setSyncInfo(true)} aria-expanded={syncInfo} aria-controls="sync-info"><RefreshCw aria-hidden />Sincronizar Bolsa LP</Button>
-            <Button variant="outline" size="sm" disabled title="Disponible en la Fase 6"><Upload aria-hidden />Importar JSON/CSV</Button>
+            <Button variant="outline" size="sm" disabled title="Disponible en la Fase 7"><Upload aria-hidden />Importar JSON/CSV</Button>
           </>
         }
       />
@@ -37,7 +37,7 @@ export function LpMarketPage() {
         <div id="sync-info" role="status" className="border-2 border-gold p-4 text-sm">
           <p className="font-semibold">Sincronización no configurada.</p>
           <p className="mt-1 text-fg-muted">
-            No hay un proveedor automático autorizado. La importación manual validada (JSON/CSV) llega en la Fase 6. No se simulan sincronizaciones.
+            No hay un proveedor automático autorizado. La importación manual validada (JSON/CSV) llega en la Fase 7. No se simulan sincronizaciones.
           </p>
         </div>
       )}
@@ -81,7 +81,7 @@ export function LpMarketPage() {
         <h2 id="registry" className="kicker mb-2 border-b-2 border-rule pb-1">Registro inicial de jugadores (semilla)</h2>
         <ul className="flex flex-wrap gap-2">{INITIAL_LP_PLAYERS.map((p) => <li key={p}><Badge tone="muted" className="normal-case tracking-normal text-xs font-medium">{p}</Badge></li>)}</ul>
       </section>
-      <PhaseNotice phase={6}>Registro editable, importaciones validadas, método DPM-like vs. línea base estricta, snapshots históricos y aprobación editorial.</PhaseNotice>
+      <PhaseNotice phase={7}>Registro editable, importaciones validadas, método DPM-like vs. línea base estricta, snapshots históricos y aprobación editorial.</PhaseNotice>
     </div>
   );
 }

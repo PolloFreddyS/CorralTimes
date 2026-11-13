@@ -17,9 +17,9 @@ export function RankingsPage() {
         kicker="Power Rankings"
         title={`Ranking de la edición N.º ${edition.data.number}`}
         description="Curado a mano por la redacción. Las posiciones nunca se generan automáticamente."
-        actions={<><Badge tone={edition.data.rankingState === 'FINAL' ? 'green' : 'gold'}>{edition.data.rankingState === 'FINAL' ? 'Final' : 'Borrador'}</Badge><Button size="sm" variant="ink" disabled title="Disponible en la Fase 5">Congelar ranking</Button></>}
+        actions={<><Badge tone={edition.data.rankingState === 'FINAL' ? 'green' : 'gold'}>{edition.data.rankingState === 'FINAL' ? 'Final' : 'Borrador'}</Badge><Button size="sm" variant="ink" disabled title="Disponible en la Fase 7">Congelar ranking</Button></>}
       />
-      <PhaseNotice phase={5}>Editor de posiciones, comentarios y congelamiento con la edición en la Fase 5.</PhaseNotice>
+      <PhaseNotice phase={7}>Editor de posiciones, comentarios, historial y congelamiento con la edición.</PhaseNotice>
       <ol className="mt-4 max-w-2xl border-y-2 border-rule">{ranking.data.map((r) => <PlayerRankCard key={r.position} entry={r} />)}</ol>
     </div>
   );

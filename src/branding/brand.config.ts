@@ -11,7 +11,9 @@
 export const brand = {
   name: 'EL CORRAL TIMES',
   emoji: '🐓',
-  appName: 'EL CORRAL TIMES HQ',
+  appName: 'CORRAL TIMES HQ',
+  /** Versión del producto. */
+  productVersion: '2.0',
   subtitle: 'Noticias, dramas, memes y más caos del gallinero',
   motto: 'Filipenses 4:13',
   community: 'Los Gallos Sin Planes',

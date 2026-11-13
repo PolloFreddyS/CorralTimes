@@ -1,6 +1,6 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
-  "name": "corral-times-hq",
+  "name": "corral-times",
   "main": "worker/index.ts",
   "compatibility_date": "2026-10-01",
   "compatibility_flags": ["nodejs_compat"],
@@ -20,11 +20,11 @@
   },
   "env": {
     "preview": {
-      "name": "corral-times-hq-preview",
+      "name": "corral-times-preview",
       "vars": { "APP_ENV": "preview", "INTAKE_MODE": "not_configured", "DEMO_CONTENT": "false" }
     },
     "production": {
-      "name": "corral-times-hq",
+      "name": "corral-times",
       "vars": { "APP_ENV": "production", "INTAKE_MODE": "not_configured", "DEMO_CONTENT": "false" }
     }
   }

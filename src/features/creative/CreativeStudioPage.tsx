@@ -9,7 +9,7 @@ import { Field, Input, NativeSelect, Textarea } from '@/components/ui/form';
 import { demoPastoralArchive } from '@/demo/fixtures';
 import { editionQuery, storiesQuery } from '@/lib/demo-queries';
 import { copyText, downloadText } from '@/lib/download';
-import { bibleToMarkdown, CREATIVE_BIBLE_V1 } from '@shared/creative/bible';
+import { bibleToMarkdown, CREATIVE_BIBLE_SEED } from '@shared/creative/bible';
 import { briefWarnings, buildCreativeBrief, type BriefInput } from '@shared/creative/brief';
 import { MEDIA_ROLE_SPECS, MEDIA_ROLES, type MediaRole } from '@shared/domain/workflow';
 
@@ -32,7 +32,7 @@ export function CreativeStudioPage() {
   const input: BriefInput | null = useMemo(() => {
     if (!edition.data) return null;
     return {
-      bible: CREATIVE_BIBLE_V1,
+      bible: CREATIVE_BIBLE_SEED,
       role,
       edition: { number: edition.data.number, publicationDate: edition.data.publicationDate, headline: stories.data?.find((s) => s.section === 'PORTADA')?.headline ?? '(sin titular principal)' },
       ...(story ? { article: { title: story.headline, summary: story.satiricalBody, approvedFacts: story.approved ? [story.satiricalBody].filter(Boolean) : [] } } : {}),
@@ -60,8 +60,8 @@ export function CreativeStudioPage() {
         description="ChatGPT es el director creativo oficial. Aquí se prepara el brief; la imagen se crea y aprueba en ChatGPT y luego se sube a HQ."
         actions={
           <>
-            <Button variant="outline" size="sm" onClick={() => downloadText(`creative-bible-v${CREATIVE_BIBLE_V1.version}.md`, bibleToMarkdown(CREATIVE_BIBLE_V1))}><Download aria-hidden />Biblia (.md)</Button>
-            <Button variant="outline" size="sm" onClick={() => downloadText(`creative-bible-v${CREATIVE_BIBLE_V1.version}.json`, JSON.stringify(CREATIVE_BIBLE_V1, null, 2), 'application/json')}><Download aria-hidden />Biblia (.json)</Button>
+            <Button variant="outline" size="sm" onClick={() => downloadText(`creative-bible-v${CREATIVE_BIBLE_SEED.version}.md`, bibleToMarkdown(CREATIVE_BIBLE_SEED))}><Download aria-hidden />Biblia (.md)</Button>
+            <Button variant="outline" size="sm" onClick={() => downloadText(`creative-bible-v${CREATIVE_BIBLE_SEED.version}.json`, JSON.stringify(CREATIVE_BIBLE_SEED, null, 2), 'application/json')}><Download aria-hidden />Biblia (.json)</Button>
           </>
         }
       />

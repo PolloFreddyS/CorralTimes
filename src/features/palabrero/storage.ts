@@ -10,7 +10,7 @@ export interface SavedProgress {
 }
 
 /** Clave específica por puzzle/edición. Solo se guardan intentos y su retroalimentación (nunca la respuesta). */
-export const progressKey = (puzzleId: string) => `ct:palabrero:v1:${puzzleId}`;
+export const progressKey = (puzzleId: string) => `ct:palabrero:${puzzleId}`;
 
 export function loadProgress(puzzleId: string): GuessRow[] {
   try {

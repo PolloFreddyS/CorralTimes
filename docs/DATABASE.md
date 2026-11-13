@@ -20,7 +20,7 @@ Conventions for every table:
 | `article_sources` | Article ↔ submission references (many-to-many) |
 | `characters` | Recurring community personalities (Creative Bible registry) |
 | `media_assets` / `media_revisions` | Original (private) + derivatives (public after approval), role, dimensions, alt, caption, source label, approval status |
-| `creative_bible_versions` | Versioned JSON (seed = `CREATIVE_BIBLE_V1`) |
+| `creative_bible_versions` | Versioned JSON (seed = `CREATIVE_BIBLE_SEED`) |
 | `creative_briefs` / `creative_generations` | Briefs generated. Optional OpenAI generations with cost and usage. |
 | `quotes`, `memes`, `rumors` | Departamento del Caos (exact text; `is_rumor` is always true for rumors) |
 | `lp_players`, `lp_import_jobs`, `lp_snapshots`, `lp_snapshot_entries` | See LP_MARKET.md. Nullable numeric fields, never defaulted to 0. |
@@ -33,5 +33,4 @@ Conventions for every table:
 `word_puzzle_attempts` is **not** created: guesses are stateless and readers aren't tracked. Rate limiting uses the
 Workers rate-limit binding instead.
 
-Quotes, memes and rumors use their own small tables, because v2 links them to articles and artwork. This replaces the
-single-table approach in the v1 plan.
+Quotes, memes and rumors use their own small tables, because they link to articles and artwork.
