@@ -50,6 +50,7 @@ export function htmlRoutes(content: (env: Bindings) => PublicContentSource) {
   r.get('/archivo', (c) => site(c, 'Hemeroteca — EL CORRAL TIMES'));
   r.get('/bolsa-lp', (c) => site(c, 'Wall Street del Tilt — EL CORRAL TIMES', 'La bolsa de valores más ridícula del LP: ganancias, pérdidas y tilt semanal.'));
   r.get('/power-rankings', (c) => site(c, 'Power Rankings — EL CORRAL TIMES'));
+  r.get('/la-voz-del-pastor', (c) => site(c, 'La Voz del Pastor — EL CORRAL TIMES', 'Una pausa entre el caos y el tilt: versículo, reflexión y aplicación de la semana.'));
   r.get('/juegos', (c) => site(c, 'El Palabrero del Corral — EL CORRAL TIMES', 'Adivina el tilt: el juego de palabras semanal de EL CORRAL TIMES.'));
   r.get('/enviar-noticia', (c) => render(c, { title: 'Corral Press Pass — ¿Qué pasó en el gallinero?', description: 'Reporta la noticia. Nosotros hacemos el escándalo.', type: 'website', image: imageFor(new URL(c.req.url).origin, null), noindex: true }));
 
@@ -72,7 +73,9 @@ export function htmlRoutes(content: (env: Bindings) => PublicContentSource) {
     const { edition, article: a } = found;
     return render(c, {
       title: a.title,
-      description: `${ARTICLE_CATEGORY_LABELS[a.category]} · Edición N.º ${edition.number} · ${a.subtitle}`,
+      description: a.pastoral
+        ? `La Voz del Pastor · ${a.pastoral.referenceLabel} · Una pausa entre el caos y el tilt`
+        : `${ARTICLE_CATEGORY_LABELS[a.category]} · Edición N.º ${edition.number} · ${a.subtitle}`,
       type: 'article',
       image: imageFor(new URL(c.req.url).origin, a.hero ?? edition.cover),
       publishedTime: a.publishedAt,
@@ -83,4 +86,4 @@ export function htmlRoutes(content: (env: Bindings) => PublicContentSource) {
 }
 
 /** Rutas que el Worker atiende antes que los assets (debe coincidir con wrangler.jsonc). */
-export const HTML_ROUTE_PATTERNS = ['/', '/ediciones', '/ediciones/*', '/archivo', '/bolsa-lp', '/power-rankings', '/juegos', '/enviar-noticia'];
+export const HTML_ROUTE_PATTERNS = ['/', '/ediciones', '/ediciones/*', '/archivo', '/bolsa-lp', '/power-rankings', '/la-voz-del-pastor', '/juegos', '/enviar-noticia'];

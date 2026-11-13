@@ -48,9 +48,12 @@ export function publicRoutes(deps: PublicDeps) {
     return c.json({
       article: a,
       edition: { slug: edition.slug, number: edition.number, publicationDate: edition.publicationDate, demo: edition.demo },
-      related: edition.articles.filter((x) => x.slug !== a.slug).slice(0, 3),
+      // La columna pastoral no se mezcla con la sátira en "relacionados" (y viceversa).
+      related: edition.articles.filter((x) => x.slug !== a.slug && (x.category === 'PASTORAL') === (a.category === 'PASTORAL')).slice(0, 3),
     });
   });
+
+  r.get('/pastoral', async (c) => c.json({ columns: await deps.content(c.env).listPastoral() }));
 
   r.get('/puzzles/:id', async (c) => {
     const id = c.req.param('id');

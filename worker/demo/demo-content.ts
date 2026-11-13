@@ -8,6 +8,7 @@ import { p, t, type ArticleDoc } from '@shared/domain/article-doc';
 import { readingMinutes } from '@shared/domain/article-doc';
 import type { PublicArticle, PublicArticleSummary, PublicArtwork, PublicEdition } from '@shared/domain/public-content';
 import type { PublicContentSource } from '../content/source';
+import { DEMO_PASTORAL_E1, DEMO_PASTORAL_E2, publicDetails } from './demo-pastoral';
 
 const pending = (role: PublicArtwork['role'], alt: string, w: number, h: number, caption?: string): PublicArtwork => ({
   role,
@@ -43,6 +44,30 @@ function toSummary(a: PublicArticle): PublicArticleSummary {
 
 function article(a: Omit<PublicArticle, 'readingMinutes' | 'publishedAt'>, publishedAt: string): PublicArticle {
   return { ...a, readingMinutes: readingMinutes(a.body), publishedAt };
+}
+
+function pastoralArticle(c: typeof DEMO_PASTORAL_E2, publishedAt: string): PublicArticle {
+  return {
+    ...article(
+      {
+        slug: c.slug,
+        title: c.title,
+        subtitle: c.subtitle,
+        category: 'PASTORAL',
+        placement: 'BRIEF',
+        summary: c.subtitle,
+        hero: pending('PASTORAL_ILLUSTRATION', 'Espacio para la ilustración pastoral oficial', 1536, 1024, 'Ilustración pastoral pendiente (ChatGPT).'),
+        credit: 'La Voz del Pastor',
+        body: c.body,
+      },
+      publishedAt,
+    ),
+    pastoral: publicDetails(c),
+  };
+}
+
+function pastoralPreview(a: PublicArticle): PublicEdition['pastoral'] {
+  return { articleSlug: a.slug, title: a.title, subtitle: a.subtitle, excerpt: a.subtitle, details: a.pastoral!, artwork: a.hero };
 }
 
 const E2_DATE = '2026-11-13';
@@ -104,6 +129,7 @@ const e2Articles: PublicArticle[] = [
     },
     E2_PUB,
   ),
+  pastoralArticle(DEMO_PASTORAL_E2, E2_PUB),
 ];
 
 const demoLp: PublicEdition['lp'] = {
@@ -150,6 +176,7 @@ const e2: PublicEdition = {
   rumors: [{ title: '¿Compra nocturna de skins?', body: 'Rumor de demostración. La redacción no ha podido confirmar nada.' }],
   briefs: ['Breve de demo: se reporta lag selectivo solo en partidas perdidas.', 'Breve de demo: alguien juró no volver a jugar ARAM. Duró 40 minutos.'],
   puzzle: { id: 'demo-puzzle-002', available: true },
+  pastoral: pastoralPreview(e2Articles.at(-1)!),
   previous: { slug: 'edicion-001-2026-11-06', number: 1 },
   next: null,
   demo: true,
@@ -170,6 +197,7 @@ const e1Articles: PublicArticle[] = [
     },
     '2026-11-06T22:00:00Z',
   ),
+  pastoralArticle(DEMO_PASTORAL_E1, '2026-11-06T22:00:00Z'),
 ];
 
 const e1: PublicEdition = {
@@ -189,6 +217,7 @@ const e1: PublicEdition = {
   rumors: [],
   briefs: [],
   puzzle: null,
+  pastoral: pastoralPreview(e1Articles.at(-1)!),
   previous: null,
   next: { slug: e2.slug, number: 2 },
 };
@@ -206,6 +235,21 @@ export const demoContentSource: PublicContentSource = {
     const e = EDITIONS.find((x) => x.slug === slug);
     return e ? structuredClone(e) : null;
   },
+  listPastoral: async () =>
+    EDITIONS.flatMap((e) =>
+      (ARTICLES.get(e.slug) ?? [])
+        .filter((a) => a.category === 'PASTORAL' && a.pastoral)
+        .map((a) => ({
+          editionSlug: e.slug,
+          editionNumber: e.number,
+          publicationDate: e.publicationDate,
+          articleSlug: a.slug,
+          title: a.title,
+          referenceLabel: a.pastoral!.referenceLabel,
+          bookCode: a.pastoral!.reference.bookCode,
+          theme: a.pastoral!.theme,
+        })),
+    ),
   article: async (editionSlug, articleSlug) => {
     const e = EDITIONS.find((x) => x.slug === editionSlug);
     const a = ARTICLES.get(editionSlug)?.find((x) => x.slug === articleSlug);

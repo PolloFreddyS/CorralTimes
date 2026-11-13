@@ -11,7 +11,7 @@
     // La API y las páginas públicas con metadatos Open Graph pasan por el Worker;
     // el resto (JS, CSS, fuentes, rutas de HQ) se sirve directo como asset estático.
     // Debe coincidir con HTML_ROUTE_PATTERNS en worker/html/pages.ts.
-    "run_worker_first": ["/api/*", "/", "/ediciones", "/ediciones/*", "/archivo", "/bolsa-lp", "/power-rankings", "/juegos", "/enviar-noticia"]
+    "run_worker_first": ["/api/*", "/", "/ediciones", "/ediciones/*", "/archivo", "/bolsa-lp", "/power-rankings", "/la-voz-del-pastor", "/juegos", "/enviar-noticia"]
   },
   "vars": {
     "APP_ENV": "local",
