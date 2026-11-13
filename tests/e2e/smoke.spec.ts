@@ -69,6 +69,26 @@ test.describe('Periódico digital público', () => {
   });
 });
 
+test.describe('La Voz del Pastor', () => {
+  test('franja en portada → columna → archivo filtrable', async ({ page }) => {
+    await page.goto('/');
+    const band = page.getByRole('region', { name: 'La Voz del Pastor' });
+    await expect(band).toBeVisible();
+    await expect(band.locator('blockquote')).toContainText('Todo lo puedo en Cristo que me fortalece.');
+    await expect(band).toContainText('Filipenses 4:13');
+    await band.getByRole('link', { name: /leer la reflexión completa/i }).click();
+    await expect(page.getByRole('heading', { level: 1, name: 'La fuerza que no depende del marcador' })).toBeVisible();
+    await expect(page.getByText(/Reina-Valera 1909 \(dominio público\)/)).toBeVisible();
+    await expect(page.getByText(/no texto bíblico/)).toBeVisible();
+    await noOverflow(page);
+    await page.getByRole('link', { name: /reflexiones anteriores/i }).click();
+    await expect(page.getByRole('link', { name: 'Descanso para los cansados' })).toBeVisible();
+    await page.getByLabel('Libro de la Biblia').selectOption('PHP');
+    await expect(page.getByRole('link', { name: 'Descanso para los cansados' })).toHaveCount(0);
+    await expect(page.getByRole('link', { name: 'La fuerza que no depende del marcador' })).toBeVisible();
+  });
+});
+
 test.describe('Corral Press Pass', () => {
   test('valida y envía un reporte en modo demo', async ({ page }) => {
     await page.goto('/enviar-noticia');
@@ -103,6 +123,14 @@ test.describe('Corral Times HQ (modo demo)', () => {
     await expect(page.locator('pre')).toContainText('1.91:1');
     await go(/centro de publicación/i);
     await expect(page.getByLabel(/mensaje/i)).toHaveValue(/EL CORRAL TIMES/);
+    await go(/mesa pastoral/i);
+    await page.getByLabel(/referencia/i).fill('Filipenses 9:1');
+    await expect(page.getByText('Ese libro no tiene ese capítulo.').first()).toBeVisible();
+    await page.getByLabel(/referencia/i).fill('Filipenses 4:13');
+    await page.getByRole('radio', { name: /paráfrasis/i }).check();
+    await page.getByRole('textbox', { name: /^paráfrasis/i }).fill('“Todo lo puedo”');
+    await expect(page.getByText(/una paráfrasis no lleva comillas/i).first()).toBeVisible();
+    await expect(page.getByRole('button', { name: /aprobar para la edición/i })).toBeDisabled();
     await go(/wall street del tilt/i);
     await page.getByRole('button', { name: /sincronizar bolsa lp/i }).click();
     await expect(page.getByText(/sincronización no configurada/i)).toBeVisible();
