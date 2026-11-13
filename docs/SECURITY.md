@@ -1,48 +1,41 @@
-# Security — threat model & controls
+# Security — threat model & controls (v2)
 
-Security is a release-blocking requirement. This document holds the Phase 0 threat model and the status of each
-control. **Status key:** ✅ implemented and tested · 🟡 partial · ⏳ planned (phase).
+Status key: ✅ implemented and tested · 🟡 partial · ⏳ planned (phase). No system is impossible to compromise. These are layered controls.
 
-## Assets
-Unpublished submissions and evidence media · admin sessions · the edition snapshots and exports ·
-LP data · integration secrets · contributor abuse-control metadata.
+## Actors
+Readers (anonymous, read-only) · contributors (anonymous, submit-only) · two admins · scheduled jobs · attackers
+who can craft any request, upload hostile files, scrape public APIs and brute-force the word game.
 
-## Actors & assumptions
-* Anyone may obtain the Press Pass link. A contributor alias is **unverified**.
-* Attackers can craft arbitrary HTTP requests, upload malicious files and replay tokens.
-* An admin session may be stolen. Environment variables may leak. Third-party providers may fail.
-
-## Threats → controls
+## Controls
 
 | # | Threat | Control | Status |
 |---|---|---|---|
-| T1 | Anonymous access to admin API | `requireAdmin` fails closed: no verifier, a throwing verifier or an unknown token all return 401 | ✅ `tests/integration/worker-api.test.ts`, e2e |
-| T2 | Admin UI shown without auth | `AdminGate` renders "Acceso restringido" outside demo mode. Queries refuse to return fixtures | ✅ `tests/integration/admin-gate.test.tsx` |
-| T3 | Privilege escalation / self-made admin | UUID allowlist `admin_users`, writable only by the provisioning role. RLS `is_admin()` | ⏳ P2 |
-| T4 | Stolen admin session | Short JWT lifetime, MFA (AAL2) for sensitive ops, audit log of sign-ins and sensitive actions | ⏳ P2 |
-| T5 | CSRF / cross-origin abuse | Same-origin `Origin` check on non-GET requests. No CORS headers | ✅ tested |
-| T6 | XSS via submissions | All user content rendered as text. ESLint bans `dangerouslySetInnerHTML`. Strict CSP | ✅ `tests/security/xss-rendering.test.tsx` |
-| T7 | Mass assignment | Zod schemas strip unknown keys (`status`, `isAdmin`, …) | ✅ unit test |
-| T8 | Spam / flooding of the Press Pass | Turnstile (server-validated), Workers rate-limit binding per IP hash + global, idempotency key, body limit (64 KB JSON) | 🟡 body limit ✅, rest ⏳ P3 |
-| T9 | Malicious uploads | MIME allowlist + magic-byte sniffing (`sniffImageMime`), 5 MB limit, server paths, private bucket, signed URLs, EXIF stripping on export | 🟡 sniffing ✅, rest ⏳ P3 |
-| T10 | Secret leakage to the browser | Only `VITE_*` public vars. `scripts/check-bundle-secrets.mjs` fails CI on privileged key patterns | ✅ scanner and its tests |
-| T11 | Secrets committed to git | `.gitignore` covers `.env*` / `.dev.vars*`. GitHub secret scanning + gitleaks in CI | 🟡 gitignore ✅, CI scan ✅ |
-| T12 | Fabricated data in production | Demo fixtures are only served in demo mode and are labeled `[DEMO]`. Missing LP data is `null`, not 0 | ✅ tests |
-| T13 | Silent edits to closed editions | Immutable snapshots, DB trigger rejecting updates on `CLOSED` editions, revisions on reopen | ⏳ P5/P7 |
-| T14 | Unauthorized scraping integrations | No Cloudflare bypass or internal-endpoint scraping. Providers must be authorized | policy, ⏳ P6 |
-| T15 | Information disclosure in errors | Stable error codes and Spanish messages. No stack traces. Generic 500 | ✅ |
-| T16 | Clickjacking / sniffing / referrer leaks | `frame-ancestors 'none'`, XFO DENY, nosniff, Referrer-Policy, HSTS, Permissions-Policy | ✅ e2e checks headers |
-| T17 | Over-retention of personal data | Configurable retention, a cleanup Cron with an audit entry, IP stored only as an expiring salted hash | ⏳ P2/P3 |
+| T1 | Anonymous access to admin API | `requireAdmin` fails closed for a missing verifier, a throwing verifier or an unknown token | ✅ tests + e2e |
+| T2 | HQ UI shown without auth | `AdminGate` shows "Acceso restringido". Queries never fall back to fixtures. | ✅ |
+| T3 | Draft or unpublished leak via public API | `PublicContentSource` only exposes published snapshots by slug. No ID routes, no filters, slugs validated | ✅ tests (P1 demo source), ⏳ DB in P5 |
+| T4 | Demo content in production | `demoContentEnabled()` ignores `DEMO_CONTENT` when `APP_ENV=production` | ✅ test |
+| T5 | Word-game answer exposure | Answer only in the Worker. The puzzle metadata endpoint omits it. The bundle scanner fails CI if a demo answer appears in `dist/client` | ✅ tests + scanner |
+| T6 | Word-game brute force | 6-attempt UX, dictionary check, POST same-origin. Workers rate limiting per IP hash planned. **A small public word list cannot be made perfectly secret.** | 🟡 ⏳ P8 |
+| T7 | XSS via articles | Closed article schema, renderer that only knows listed nodes, `safeHref` (http/https/mailto), lint ban on `dangerouslySetInnerHTML` | ✅ tests |
+| T8 | HTML or metadata injection in OG tags | All values HTML-escaped and clipped | ✅ test |
+| T9 | CSRF / cross-origin writes | `Origin` must match on non-GET requests. No CORS headers | ✅ |
+| T10 | Privilege escalation / self-made admin | UUID allowlist, provisioning-only inserts, RLS `is_admin()`, MFA (AAL2) for sensitive operations | ⏳ P2 |
+| T11 | Malicious uploads | Magic-byte sniffing, size limits, private staging bucket, server paths, public derivatives only after approval, metadata stripping | 🟡 sniffing ✅, ⏳ P3/P6 |
+| T12 | Secret leakage | Only `VITE_*` public vars. Bundle scanner covers Supabase service role/secret keys, Anthropic/OpenAI-style keys, Riot keys, Turnstile secrets, private keys and DB URLs | ✅ |
+| T13 | OpenAI key misuse / cost abuse | Server-only key, explicit admin action, budget caps, audit log | ⏳ P10 |
+| T14 | Stale cache exposes unpublished content | Public HTML is `no-cache` today. Phase 5 adds edge caching keyed on snapshot version, purged on publish/unpublish | 🟡 |
+| T15 | Unsafe GitHub workflows | `permissions: contents: read`, no `pull_request_target`, no secrets in CI, gitleaks, Dependabot | ✅ |
+| T16 | Clickjacking / sniffing | CSP `frame-ancestors 'none'`, XFO, nosniff, HSTS, Permissions-Policy, COOP on assets and Worker HTML | ✅ e2e |
+| T17 | Over-collection | No reader accounts or tracking. Word-game progress stays in localStorage. Contributor alias is unverified. IP kept only as an expiring salted hash. | ✅ / ⏳ P3 |
 
-## Headers
-* **Static assets** (`public/_headers`) use a CSP that allows only `self` and Turnstile (`challenges.cloudflare.com`).
-  `connect-src` adds `*.supabase.co`. `style-src` allows `'unsafe-inline'` because Radix injects scroll-lock styles.
-  Scripts stay strict.
-* **API** (`worker/middleware/security-headers.ts`) sets `default-src 'none'` and `Cache-Control: no-store`.
+## Indexing
+The public newspaper is indexable in production only. Demo and preview pages carry `noindex`, and
+`robots.txt` disallows `/redaccion`, `/acceso`, `/api/` and `/enviar-noticia`.
 
-## Retention defaults (configurable, Phase 2)
-Rejected evidence: 30 days · unneeded original media: 30 days after edition closure · security logs: 60 days (30–90) ·
-published editorial records: kept until deliberately removed · abuse-control IP hashes: 24 h.
+## Recovery (detailed in DEPLOYMENT.md, Phase 12)
+Supabase PITR/daily backups and a restore drill · secret rotation (`wrangler secret put` + Supabase key roll) ·
+emergency unpublish (`PUBLISHED → READY`, audited, cache purged) · incident checklist.
 
-## Reporting
-Report a vulnerability privately to the repository owner. Do not open a public issue.
+## Retention defaults
+Rejected evidence: 30 days · unused original media: 30 days after publication · security logs: 60 days ·
+published records: kept until deliberately removed · abuse IP hashes: 24 hours.

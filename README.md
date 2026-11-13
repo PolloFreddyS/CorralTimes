@@ -1,43 +1,40 @@
-# 🐓 EL CORRAL TIMES HQ
+# 🐓 EL CORRAL TIMES 2.0
 
 *“Noticias, dramas, memes y más caos del gallinero”* · Filipenses 4:13
 
-This is the internal newsroom and contribution portal for **EL CORRAL TIMES**, the satirical weekly paper of
-*Los Gallos Sin Planes*. Contributors report stories through the **Corral Press Pass**, and the two
-administrators review and organize them. Every Friday the app produces an editorial package (prompt + JSON +
-media) for ChatGPT. The app never generates or publishes the newspaper itself.
+This is the digital newspaper and editorial HQ of *Los Gallos Sin Planes*. It has two connected experiences:
 
-> **Status: Phase 1 (foundation).** The UI and the Worker skeleton are real and tested. Newsroom data is
-> **demo-only** until Phase 2 connects Supabase. See [`PROGRESS.md`](PROGRESS.md).
+* **The digital newspaper (public):** a weekly edition with articles, the LP market, Power Rankings, memes, quotes and
+  the word game *El Palabrero del Corral*. It is designed to be opened from a WhatsApp link.
+* **Corral Times HQ (`/redaccion`):** the two-admin newsroom. Submissions → articles → editions → creative briefs for
+  **ChatGPT, the official creative director** → publication → WhatsApp announcement.
+
+> **Status: Phase 1 (visual foundation), at the review checkpoint.** Everything you click is real code, but content is
+> **fictional demo data**, and the database and auth are not connected yet. See [docs/IMPLEMENTATION_STATUS.md](docs/IMPLEMENTATION_STATUS.md).
 
 ## Quick start
-
 ```bash
 npm install
-npm run dev          # http://localhost:5173 — Vite + real workerd runtime, demo mode ON
+npm run dev            # http://localhost:5173 — Vite + real workerd runtime, demo content ON
+npm run check          # typecheck + lint + tests + build + bundle secret/answer scan
+npm run test:e2e       # Playwright, desktop + mobile
 ```
 
-| URL | What |
+| Route | |
 |---|---|
-| `/` | Corral Press Pass (public submission form) |
-| `/redaccion` | Newsroom (demo mode only until Phase 2 auth) |
-| `/acceso` | Editor login (Phase 2) |
-| `/api/health` | Worker health |
+| `/` · `/ediciones/:slug` · `/ediciones/:slug/:article` | Newspaper front page, edition, article |
+| `/bolsa-lp` · `/power-rankings` · `/juegos` · `/archivo` | LP market, rankings, word game, archive |
+| `/enviar-noticia` | Corral Press Pass |
+| `/redaccion` | HQ (demo mode only until Phase 2) |
 
-## Scripts
-
-| Command | Does |
-|---|---|
-| `npm run check` | typecheck + lint + unit/integration/security tests + build + bundle secret scan |
-| `npm run test:e2e` | Playwright (desktop + mobile) against a demo-mode build in workerd |
-| `npm run preview` | Production-like build served by workerd |
-| `npm run cf-typegen` | Regenerate Worker binding types after editing `wrangler.jsonc` |
-
-Deployment is intentionally disabled until Phase 9 and requires the owner's approval.
+Check the link preview metadata with `curl -s localhost:5173/ | grep og:`.
 
 ## Docs
-[Architecture](docs/ARCHITECTURE.md) · [Security](docs/SECURITY.md) · [Data model](docs/DATA_MODEL.md)
+[Architecture](docs/ARCHITECTURE.md) · [Design system](docs/DESIGN_SYSTEM.md) · [Security](docs/SECURITY.md) ·
+[Database](docs/DATABASE.md) · [Editorial workflow](docs/EDITORIAL_WORKFLOW.md) · [Creative Studio](docs/CREATIVE_STUDIO.md) ·
+[LP market](docs/LP_MARKET.md) · [Word game](docs/WORD_GAME.md) · [Publishing](docs/PUBLISHING.md) ·
+[Deployment](docs/DEPLOYMENT.md) · [Roadmap](docs/ROADMAP.md)
 
 ## Branding
-No official logo exists in the repo yet. To add one, put it in `public/brand/` and set `logo.src` in
-`src/branding/brand.config.ts`. Colors are defined in `src/styles/index.css`.
+No official logo is in the repo. To add one, put it in `public/brand/` and set `logo.src` in `src/branding/brand.config.ts`.
+The social card is `public/social/og-default.png` (regenerate it with `node scripts/render-og-default.mjs`).

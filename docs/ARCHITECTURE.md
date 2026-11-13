@@ -1,124 +1,94 @@
-# Architecture — EL CORRAL TIMES HQ
+# Architecture — EL CORRAL TIMES 2.0
 
-> Phase 0 deliverable: repository audit, architecture, dependency decisions, deployment design,
-> milestone plan and external prerequisites.
+> Phase 0 deliverable for spec v2: repository assessment, architecture, decisions and plan.
 
-## 1. Repository audit (2026-11-13)
+## 1. Repository assessment (2026-11-13)
 
 | Item | Finding |
 |---|---|
-| Source code | None. The repository had no commits. |
-| Branding / logo | **No official Corral Times logo found.** A temporary typographic masthead is used, with a replacement point in `src/branding/brand.config.ts` (`logo.src`). |
-| Workflows / config | None. |
-| Decision | Greenfield scaffold. Nothing existing was overwritten. |
+| Prior work | The v1 Phase 0/1 foundation was already on this branch: React/Vite SPA, Hono Worker, design system and HQ shells. It was **extended, not replaced**. |
+| Official logo / assets | **None in the repo.** A temporary typographic masthead and a typographic social card are used. Replacement points: `src/branding/brand.config.ts` and `public/social/`. |
+| Deployment workflows | CI only (`.github/workflows/ci.yml`). There is no deploy workflow, by design. |
+| Branch | Work continues on `claude/corral-times-hq-v1-krfiin`. The session's tooling only allows this branch. It can be renamed to `feature/corral-times-2` when the PR is opened. |
 
-Branch note: the session's tooling requires work on `claude/corral-times-hq-v1-krfiin`.
-The spec asked for `feature/corral-times-hq-v1`. Both names refer to the same feature branch,
-and it can be renamed when the PR is opened.
-
-## 2. Shape of the system
+## 2. Two experiences, one deployment
 
 ```
-Browser (React SPA) ──same origin──▶ Cloudflare Worker (Hono, /api/*) ──▶ Supabase (Postgres + Auth + Storage)
-        ▲                                   │
-        └──── static assets (Workers Static Assets, SPA fallback, public/_headers)
+                      ┌──────────────── Cloudflare Worker (Hono) ────────────────┐
+WhatsApp / browser ──▶│ HTML routes (/, /ediciones/…): shell + per-page OG meta  │──▶ ASSETS (SPA bundle)
+                      │ /api/public/*  read-only, published content, puzzle guess │──▶ Supabase (Phase 2+)
+HQ (two admins)   ──▶│ /api/admin/*   requireAdmin (JWT + UUID allowlist, MFA)    │
+                      └──────────────────────────────────────────────────────────┘
 ```
 
-* **One deployable**: a single Worker serves the SPA through Static Assets. It also serves `/api/*`
-  (`run_worker_first: ["/api/*"]`). There are no microservices, no Redis and no containers.
-* **Same-origin API**: the API emits no CORS headers. State-changing requests must carry a matching `Origin`
-  header (CSRF defense, `worker/middleware/same-origin.ts`).
-* **Shared domain layer** (`shared/domain/*`): business rules live here, outside React, and are imported by both
-  the SPA and the Worker. That covers the edition calendar, submission validation and lifecycle, readiness rules
-  and LP utilities.
-* **Privileged access happens only in the Worker.** The browser holds only the public Supabase publishable key
-  (protected by RLS) and the Turnstile site key.
+* **A: digital newspaper (public).** Cream newsprint mode. No login. It reads only published snapshots.
+* **B: Corral Times HQ (`/redaccion`).** Dark newsroom mode. Two admins. All writes go through
+  authenticated Worker routes, and RLS is enforced again inside Postgres.
+* **Isolation.** Public routes and admin routes are separate Hono sub-apps with separate data paths.
+  The public `PublicContentSource` interface has *no method* that can return a draft.
 
-### Data access strategy (Phase 2+)
+### Why no Next.js (social previews still work)
+WhatsApp and Open Graph crawlers don't run JavaScript. For public routes the Worker fetches the SPA
+shell from `ASSETS` and injects an escaped `<title>`, `description`, `canonical`, `og:*` and `twitter:*`
+tags (`worker/html/`). It does this before returning the HTML, with the right status (404 for unknown slugs).
+That covers the "metadata in initial HTML" requirement without a second framework.
 
-| Path | Credential | Why |
-|---|---|---|
-| Admin reads/writes | Admin's Supabase JWT forwarded by the Worker to PostgREST | RLS enforces `is_admin()` again inside Postgres (defense in depth). |
-| Public submission | Worker → `SECURITY DEFINER` RPC `submit_news(...)` with a narrowly granted role | Anonymous users never get table access. The RPC can only insert one row and returns an opaque receipt. |
-| Storage uploads | Worker-generated, server-controlled paths in a **private** bucket | No anonymous listing. Reads use short-lived signed URLs. |
-| Cleanup / retention jobs | Service role, only in a Cron Trigger handler | Never reachable from a request path. |
+**Planned for Phase 5:** server-render the article body itself into the shell, using
+`renderToString` of the same React components plus `hydrateRoot`. Search engines will then see the
+full text, and edge caching of published snapshots will be added with purge-on-publish.
 
-### Admin identity
+## 3. Data flow by audience
 
-* Sign-in uses a Supabase Auth magic link with TOTP MFA (AAL2 required for sensitive operations).
-* The `admin_users` allowlist is keyed by **`auth.users.id` (UUID)**. Rows are inserted only by a documented
-  provisioning SQL/CLI step run by the owner. Self-registration never grants admin.
-* The Worker verifies the JWT against Supabase JWKS, checks `aal`, and checks the allowlist. Every failure
-  path fails closed (`worker/auth/require-admin.ts`). A secret URL is never treated as authentication.
-
-## 3. Dependency decisions (versions verified 2026-11-13)
-
-| Concern | Choice | Notes |
-|---|---|---|
-| UI | React 19.3, TypeScript 6.0 (strict + `noUncheckedIndexedAccess`) | TS 7 (native) is not yet supported by typescript-eslint. |
-| Build | Vite 8 + `@cloudflare/vite-plugin` 1.69 | Dev and preview run the real `workerd` runtime. |
-| Styling | Tailwind CSS 4.3 + CSS variables. Radix primitives (`radix-ui`) in shadcn style (`cva`, `tailwind-merge`) | Components are copied in, not installed via the shadcn CLI. |
-| Routing | React Router 7 (data router, lazy admin routes) | The public page does not download admin code. |
-| Server state | TanStack Query 5 | Query keys are already shaped for the real API. |
-| Forms | React Hook Form 7 + Zod 4 (`@hookform/resolvers` 5) | The same Zod schema validates in the client and the Worker. |
-| API | Hono 4 | Lightweight and Workers-native. Testable with `app.request()` in Node. |
-| Fonts | `@fontsource` packages (self-hosted) | No third-party font CDN, so the CSP can stay strict. |
-| Tests | Vitest 5, Testing Library, Playwright 1.63 (pinned to the preinstalled browser build) | |
-| Persistence (Phase 2) | Supabase Postgres, Auth, Storage | |
-
-Known advisory: `npm audit` reports a moderate ReDoS issue in `minimatch`. It is reached only through
-`typescript-eslint`, a dev-only lint dependency that never ships to the bundle or Worker. It is tracked for
-the upstream fix.
-
-## 4. Module layout
-
-```
-src/            React SPA
-  app/          router, providers, theme, admin gate
-  branding/     brand.config.ts (logo, fonts, colors, identity)
-  components/   editorial/ (13 newspaper components), ui/ (primitives), layout/
-  features/     one folder per newsroom module
-  demo/         labeled fictional fixtures (demo mode only)
-  lib/          api client, env, queries
-  styles/       tokens + fonts
-shared/domain/  business rules shared by SPA and Worker
-worker/         Hono API: api/, auth/, middleware/ (services/, providers/ arrive with later phases)
-supabase/       migrations/ + seed.sql (Phase 2)
-tests/          unit/, integration/, security/, e2e/
-scripts/        check-bundle-secrets.mjs
-```
-
-## 5. Environments
-
-| Env | How | Data | Demo mode |
+| Audience | Path | Credential | Can do |
 |---|---|---|---|
-| local | `npm run dev` (Vite + workerd) | local Supabase (Phase 2) / fixtures | on by default in dev |
-| preview | `wrangler deploy --env preview` (Phase 9) | separate Supabase project | only if `VITE_DEMO_MODE=true` is set explicitly |
-| production | manual, owner-approved | production Supabase | **must be off** |
+| Reader | `/api/public/editions…`, `/api/public/puzzles…` | none | Read published snapshots by **slug**. Submit word guesses and get feedback only. |
+| Contributor | `POST /api/public/submissions` | Turnstile token | Insert one submission via a `SECURITY DEFINER` RPC (Phase 3). |
+| Admin | `/api/admin/*` | Supabase JWT (AAL2 for sensitive operations) + `admin_users` allowlist | Editorial CRUD, publish, uploads, briefs |
+| Jobs | Cron Trigger handlers | Service role, never on a request path | Retention cleanup, scheduled publication |
 
-Outside demo mode, every newsroom query fails with `DATA_SOURCE_NOT_CONFIGURED` instead of returning
-fixtures. Admin screens render only "Acceso restringido" until auth exists.
+## 4. Module map
 
-## 6. Milestone plan
+```
+shared/domain/     workflow.ts (state machines, media roles) · submission(+schema) · article-doc(+schema)
+                   public-content.ts (read contract, slugs) · palabrero.ts · lp.ts · readiness.ts · edition-calendar.ts
+shared/creative/   bible.ts (Creative Bible v1) · brief.ts (ChatGPT briefs) · whatsapp.ts
+worker/            app.ts · api/public.ts · auth/ · html/ (meta, headers, pages) · content/ · puzzles/ · demo/
+src/               app/ (router, theme, gates) · components/{editorial,newspaper,charts,ui,layout}
+                   features/{public,press-pass,palabrero,creative,publication,dashboard,submissions,stories,
+                             editions,lp-market,rankings,caos,archive,security,auth}
+```
 
-| Phase | Scope | Status |
+Schemas are kept in separate files (`*-schema.ts`) so that Zod is not loaded on the public front page.
+
+## 5. Dependency decisions
+These are unchanged from v1 (React 19.3, TS 6.0 strict, Vite 8, Tailwind 4.3, Hono 4, TanStack Query 5,
+RHF 7 + Zod 4, Vitest 5, Playwright 1.63). **Nothing new was added in v2.** Charts are hand-built in SVG/HTML,
+and the social card is rendered by a script with the Playwright already used for tests.
+
+Additions planned for later phases:
+
+| Phase | Addition | Notes |
 |---|---|---|
-| 0 | Audit, architecture, threat model, plan | ✅ this document |
-| 1 | Foundation, design system, page shells, Worker skeleton, tests, CI | ✅ |
-| 2 | Supabase schema + RLS, admin auth/MFA/allowlist, audit log, storage, permission tests | next — needs Supabase project |
-| 3 | Press Pass backend: Turnstile, rate limits, uploads, persistence | needs Turnstile keys |
-| 4 | Inbox, Story Desk, decisions history, Caos module | |
-| 5 | Edition builder, locking/revisions, Hemeroteca, Power Rankings | |
-| 6 | LP market: registry, manual import, DPM-like vs strict calculations, snapshots | |
-| 7 | Friday export: immutable snapshot, master prompt, JSON, ZIP | |
-| 8 | Hardening & QA | |
-| 9 | Deployment preparation (no automatic production deploy) | |
+| 2 | `@supabase/supabase-js` | |
+| 4 | Tiptap | The article JSON schema is already its subset. |
+| 7 | CSV parser | Possibly hand-written. |
+| 10 | OpenAI SDK, or plain `fetch` | The model ID comes from config. |
 
-## 7. External prerequisites
+## 6. Environments
 
-1. **Supabase project(s)**, ideally one for preview and one for production. The owner creates them.
-   I need the project URL and publishable key (public). The service-role key goes only into
-   `wrangler secret put`, never into chat or git.
-2. **Cloudflare account** with Workers, and a Turnstile widget (site key + secret key).
-3. **Admin emails** for the owner and Divilight. They are used only during provisioning, never hardcoded.
-4. (Optional, later) a Riot API key for `RiotOfficialProvider`. There is no authorized DPM API; see `LP_INTEGRATION.md` (Phase 6).
+| Env | `APP_ENV` | `DEMO_CONTENT` | `VITE_DEMO_MODE` (HQ) |
+|---|---|---|---|
+| local (`npm run dev`, `npm run preview`) | local | true | true in dev |
+| preview | preview | false (set `true` explicitly for a demo preview) | false |
+| production | production | **ignored**: demo content is never served (`demoContentEnabled`) | false |
+
+## 7. External prerequisites (requested only when needed)
+
+| Phase | What's needed |
+|---|---|
+| 2 | Supabase project URL + publishable key. The service-role key goes only into `wrangler secret put`. Admin emails are used only at provisioning. |
+| 3 | Turnstile site key + secret key. |
+| 5 / 12 | Cloudflare account and custom domain. |
+| 10 (optional) | OpenAI API key, chosen image model and a monthly budget. |
+
+See [ROADMAP.md](ROADMAP.md) and [IMPLEMENTATION_STATUS.md](IMPLEMENTATION_STATUS.md).
