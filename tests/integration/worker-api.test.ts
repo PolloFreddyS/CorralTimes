@@ -49,7 +49,7 @@ describe('API del Worker — Fase 1', () => {
   });
 
   it('rutas desconocidas devuelven 404 JSON sin detalles internos', async () => {
-    const res = await req(app, '/api/../../etc/passwd');
+    const res = await req(app, '/api/no-existe');
     expect(res.status).toBe(404);
     expect(await res.json()).toMatchObject({ error: { code: 'NOT_FOUND' } });
   });

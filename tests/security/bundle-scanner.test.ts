@@ -21,3 +21,14 @@ describe('escáner de secretos del bundle', () => {
     expect(scanText(`${header}.${body}.sig`)).toEqual([]);
   });
 });
+
+describe('secreto de las respuestas del palabrero', () => {
+  it('detecta una respuesta expuesta como palabra completa', async () => {
+    // @ts-expect-error — módulo JS sin tipos
+    const { findForbiddenWords, loadForbiddenWords } = await import('../../scripts/check-bundle-secrets.mjs');
+    const words: string[] = loadForbiddenWords();
+    expect(words.length).toBeGreaterThan(0);
+    expect(findForbiddenWords(`const a="${words[0]!.toLowerCase()}"`, words)).toEqual([words[0]]);
+    expect(findForbiddenWords('constructor estructura', ['TRUCO'])).toEqual([]);
+  });
+});

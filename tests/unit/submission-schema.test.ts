@@ -1,12 +1,12 @@
 import { describe, expect, it } from 'vitest';
 import {
   allowedTransitions,
-  buildSubmissionSchema,
   canTransition,
   normalizeText,
   sniffImageMime,
   SUBMISSION_LIMITS,
 } from '@shared/domain/submission';
+import { buildSubmissionSchema } from '@shared/domain/submission-schema';
 
 const TODAY = '2026-11-13';
 const schema = buildSubmissionSchema(TODAY);
