@@ -16,6 +16,10 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { cn } from '@/lib/cn';
 import { articleQuery, editionBySlugQuery, editionsListQuery, latestEditionQuery } from '@/lib/public-api';
 import { PalabreroGame } from '@/features/palabrero/PalabreroGame';
+import { PastoralColumn, PastoralHeader } from '@/components/pastoral/PastoralColumn';
+import { BIBLE_BOOKS } from '@shared/domain/bible';
+import type { PublicPastoralArchiveEntry } from '@shared/domain/public-content';
+import { apiFetch } from '@/lib/api';
 import { formatLongDate } from '@shared/domain/edition-calendar';
 import { DATA_QUALITY_LABELS, formatLpDelta, QUEUE_LABELS, sumKnown } from '@shared/domain/lp';
 import { ARTICLE_CATEGORY_LABELS, articlePath, editionPath } from '@shared/domain/public-content';
@@ -73,6 +77,23 @@ export function ArticlePage() {
   if (q.isError) return <ErrorState error={q.error} />;
   if (!q.data) return <NotFoundBlock what="Noticia" />;
   const { article: a, edition, related } = q.data;
+  if (a.pastoral) {
+    return (
+      <div>
+        {edition.demo && <DemoNotice />}
+        <nav aria-label="Ruta" className="mb-4 border-y border-rule py-1.5 font-sans text-xs">
+          <Link to={editionPath(edition.slug)} className="inline-flex items-center gap-1 font-semibold hover:underline">
+            <ArrowLeft aria-hidden className="size-3.5" />Edición N.º {edition.number} · {formatLongDate(edition.publicationDate)}
+          </Link>
+        </nav>
+        <PastoralColumn title={a.title} subtitle={a.subtitle} details={a.pastoral} body={a.body} artwork={a.hero} dateLabel={formatLongDate(edition.publicationDate)} />
+        <div className="mx-auto mt-6 flex max-w-3xl flex-wrap items-center justify-between gap-3">
+          <ShareButtons title={`La Voz del Pastor: ${a.title}`} path={articlePath(edition.slug, a.slug)} />
+          <Link to="/la-voz-del-pastor" className="font-sans text-sm font-semibold underline">Reflexiones anteriores</Link>
+        </div>
+      </div>
+    );
+  }
   return (
     <div>
       {edition.demo && <DemoNotice />}
@@ -218,6 +239,52 @@ export function JuegosPage() {
       <PageTitle kicker="Juegos" title="El Palabrero del Corral">“Adivina el tilt” · Un juego de palabras por edición.</PageTitle>
       {q.isLoading ? <PageSkeleton /> : id ? <PalabreroGame puzzleId={id} /> : (
         <p className={cn('border border-dashed border-rule-soft p-8 text-center font-serif')}>No hay un palabrero activo para la edición actual.</p>
+      )}
+    </div>
+  );
+}
+
+export function PastoralArchivePage() {
+  const q = useQuery({ queryKey: ['public', 'pastoral'], queryFn: async () => (await apiFetch<{ columns: PublicPastoralArchiveEntry[] }>('/public/pastoral')).columns });
+  const [book, setBook] = useState('');
+  const [theme, setTheme] = useState('');
+  const [year, setYear] = useState('');
+  const all = q.data ?? [];
+  const books = BIBLE_BOOKS.filter((b) => all.some((c) => c.bookCode === b.code));
+  const themes = [...new Set(all.map((c) => c.theme))].sort();
+  const years = [...new Set(all.map((c) => c.publicationDate.slice(0, 4)))].sort().reverse();
+  const list = all.filter((c) => (!book || c.bookCode === book) && (!theme || c.theme === theme) && (!year || c.publicationDate.startsWith(year)));
+  const select = 'h-11 border border-rule bg-surface-raised px-3 font-sans text-sm';
+  return (
+    <div data-tone="pastoral" className="-mx-4 bg-surface px-4 py-6 text-fg sm:py-10">
+      <PastoralHeader />
+      <p className="mx-auto mt-3 max-w-xl text-center font-serif text-fg-muted">Archivo de reflexiones semanales. Cada columna conserva su pasaje, traducción y fecha de publicación.</p>
+      <div className="mx-auto mt-6 grid max-w-3xl gap-3 sm:grid-cols-3" role="search" aria-label="Filtrar reflexiones">
+        <select aria-label="Libro de la Biblia" className={select} value={book} onChange={(e) => setBook(e.target.value)}>
+          <option value="">Todos los libros</option>
+          {books.map((b) => <option key={b.code} value={b.code}>{b.name}</option>)}
+        </select>
+        <select aria-label="Tema" className={select} value={theme} onChange={(e) => setTheme(e.target.value)}>
+          <option value="">Todos los temas</option>
+          {themes.map((t) => <option key={t} value={t}>{t}</option>)}
+        </select>
+        <select aria-label="Año" className={select} value={year} onChange={(e) => setYear(e.target.value)}>
+          <option value="">Todas las fechas</option>
+          {years.map((y) => <option key={y} value={y}>{y}</option>)}
+        </select>
+      </div>
+      {q.isLoading ? <PageSkeleton /> : q.isError ? <ErrorState error={q.error} /> : list.length === 0 ? (
+        <p className="mx-auto mt-8 max-w-xl border border-dashed border-rule-soft p-6 text-center font-serif">{all.length ? 'Ninguna reflexión coincide con los filtros.' : 'Todavía no hay reflexiones publicadas.'}</p>
+      ) : (
+        <ul className="mx-auto mt-8 max-w-3xl divide-y divide-rule-soft border-y border-rule">
+          {list.map((c) => (
+            <li key={`${c.editionSlug}/${c.articleSlug}`} className="py-4">
+              <p className="kicker text-gold">{c.referenceLabel} · {c.theme}</p>
+              <h2 className="mt-1 font-headline text-2xl font-bold"><Link className="hover:underline" to={articlePath(c.editionSlug, c.articleSlug)}>{c.title}</Link></h2>
+              <p className="mt-0.5 font-sans text-xs text-fg-muted">Edición N.º {c.editionNumber} · {formatLongDate(c.publicationDate)}</p>
+            </li>
+          ))}
+        </ul>
       )}
     </div>
   );

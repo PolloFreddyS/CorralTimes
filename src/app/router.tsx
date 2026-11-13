@@ -11,7 +11,7 @@ import { NotFound } from './NotFound';
  * Todo lo demás se carga de forma diferida; el código de HQ nunca se descarga en páginas públicas.
  */
 const page = (load: () => Promise<{ default: React.ComponentType }>) => async () => ({ Component: (await load()).default });
-const pub = (name: 'EditionPage' | 'ArticlePage' | 'BolsaLpPage' | 'PowerRankingsPage' | 'JuegosPage') =>
+const pub = (name: 'EditionPage' | 'ArticlePage' | 'BolsaLpPage' | 'PowerRankingsPage' | 'JuegosPage' | 'PastoralArchivePage') =>
   page(() => import('@/features/public/pages').then((m) => ({ default: m[name] })));
 
 export const routes: RouteObject[] = [
@@ -26,6 +26,7 @@ export const routes: RouteObject[] = [
       { path: 'archivo', lazy: page(() => import('@/features/public/pages').then((m) => ({ default: () => <m.EditionsPage archive /> }))) },
       { path: 'bolsa-lp', lazy: pub('BolsaLpPage') },
       { path: 'power-rankings', lazy: pub('PowerRankingsPage') },
+      { path: 'la-voz-del-pastor', lazy: pub('PastoralArchivePage') },
       { path: 'juegos', lazy: pub('JuegosPage') },
       { path: 'enviar-noticia', lazy: page(() => import('@/features/press-pass/PressPassPage').then((m) => ({ default: m.PressPassPage }))) },
       { path: 'press-pass', element: <Navigate to="/enviar-noticia" replace /> },
@@ -44,6 +45,7 @@ export const routes: RouteObject[] = [
           { path: 'buzon', lazy: page(() => import('@/features/submissions/InboxPage').then((m) => ({ default: m.InboxPage }))) },
           { path: 'mesa', lazy: page(() => import('@/features/stories/StoryDeskPage').then((m) => ({ default: m.StoryDeskPage }))) },
           { path: 'mesa/:submissionId', lazy: page(() => import('@/features/stories/StoryDeskPage').then((m) => ({ default: m.StoryDeskPage }))) },
+          { path: 'mesa-pastoral', lazy: page(() => import('@/features/pastoral/MesaPastoralPage').then((m) => ({ default: m.MesaPastoralPage }))) },
           { path: 'imprenta', lazy: page(() => import('@/features/editions/EditionBuilderPage').then((m) => ({ default: m.EditionBuilderPage }))) },
           { path: 'creative-studio', lazy: page(() => import('@/features/creative/CreativeStudioPage').then((m) => ({ default: m.CreativeStudioPage }))) },
           { path: 'wall-street', lazy: page(() => import('@/features/lp-market/LpMarketPage').then((m) => ({ default: m.LpMarketPage }))) },

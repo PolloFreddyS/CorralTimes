@@ -2,6 +2,7 @@ import { ArrowLeft, ArrowRight, Gamepad2 } from 'lucide-react';
 import { Link } from 'react-router';
 import { BreakingNewsBanner, EditorialStamp, NewspaperMasthead, PlayerRankCard, QuoteCard, RumorLabel } from '@/components/editorial';
 import { ArtworkSlot } from '@/components/newspaper/ArtworkSlot';
+import { PastoralBand } from '@/components/pastoral/PastoralBand';
 import { ShareButtons } from '@/components/newspaper/ShareButtons';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/cn';
@@ -40,8 +41,10 @@ export function DemoNotice() {
 
 /** Portada digital de una edición. Orden editorial fijo según la especificación v2 (§7). */
 export function EditionFront({ edition: e }: { edition: PublicEdition }) {
-  const lead = e.articles.find((a) => a.placement === 'LEAD') ?? e.articles[0];
-  const secondary = e.articles.filter((a) => a !== lead && a.placement !== 'BRIEF');
+  // La columna pastoral nunca se mezcla con las rejillas satíricas: tiene su propia franja.
+  const satire = e.articles.filter((a) => a.category !== 'PASTORAL');
+  const lead = satire.find((a) => a.placement === 'LEAD') ?? satire[0];
+  const secondary = satire.filter((a) => a !== lead && a.placement !== 'BRIEF');
   const lpTotal = e.lp ? sumKnown(e.lp.entries.map((x) => x.lpChange)) : null;
   const movers = e.lp ? [...e.lp.entries].filter((x) => x.lpChange !== null).sort((a, b) => b.lpChange! - a.lpChange!) : [];
 
@@ -69,7 +72,7 @@ export function EditionFront({ edition: e }: { edition: PublicEdition }) {
         </section>
       )}
 
-      <div className="rule-double my-6" />
+      {e.pastoral ? <div className="my-8"><PastoralBand editionSlug={e.slug} preview={e.pastoral} /></div> : <div className="rule-double my-6" />}
 
       <div className="grid gap-8 lg:grid-cols-[2fr_1fr]">
         <div className="min-w-0 space-y-8">

@@ -23,6 +23,8 @@ export const demoEdition: Edition = {
   revision: 1,
   lpSnapshotState: 'PENDING_APPROVAL',
   rankingState: 'DRAFT',
+  pastoralState: 'APPROVED',
+  pastoralPassageVerified: true,
 };
 
 export const demoSubmissions: SubmissionSummary[] = [
@@ -147,4 +149,10 @@ export const demoSecurityEvents: SecurityEvent[] = [
   { id: 'se-1', kind: 'AUTHZ_DENIED', at: '2026-11-12T03:12:00Z', actor: null, summary: '[DEMO] Solicitud sin sesión a /api/admin rechazada (401).', severity: 'warning' },
   { id: 'se-2', kind: 'ADMIN_SIGN_IN', at: '2026-11-11T22:00:00Z', actor: 'admin-demo', summary: '[DEMO] Inicio de sesión con MFA.', severity: 'info' },
   { id: 'se-3', kind: 'INTEGRATION_FAILURE', at: '2026-11-10T18:45:00Z', actor: null, summary: '[DEMO] Proveedor LP no configurado.', severity: 'info' },
+];
+
+/** Archivo pastoral DEMO para la Mesa Pastoral (títulos de muestra). */
+export const demoPastoralArchive = [
+  { id: 'pa-2', editionNumber: 2, publicationDate: '2026-11-13', title: 'La fuerza que no depende del marcador', reference: 'Filipenses 4:13 (RVR1909)', verse: 'Filipenses 4:13', translation: 'RVR1909', theme: 'Fortaleza', status: 'APPROVED' as const },
+  { id: 'pa-1', editionNumber: 1, publicationDate: '2026-11-06', title: 'Descanso para los cansados', reference: 'Mateo 11:28 (RVR1909, paráfrasis)', verse: 'Mateo 11:28', translation: 'RVR1909', theme: 'Paz', status: 'PUBLISHED' as const },
 ];

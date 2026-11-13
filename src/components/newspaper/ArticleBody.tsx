@@ -1,6 +1,7 @@
 import { Info, Megaphone, CircleHelp } from 'lucide-react';
 import type { ReactNode } from 'react';
 import { RumorLabel } from '@/components/editorial';
+import { ScripturePassage } from '@/components/pastoral/ScripturePassage';
 import { safeHref, type ArticleDoc, type Block, type TextNode } from '@shared/domain/article-doc';
 
 /**
@@ -50,6 +51,8 @@ function BlockView({ block }: { block: Block }) {
           <figcaption className="mt-2 font-sans text-xs tracking-wide uppercase text-fg-muted">— {block.attrs.attribution} · texto exacto</figcaption>
         </figure>
       );
+    case 'scripture':
+      return <ScripturePassage className="!my-8" mode={block.attrs.mode} text={block.attrs.text} reference={block.attrs.reference} translation={block.attrs.translation} size="md" />;
     case 'callout': {
       const { Icon, className } = CALLOUT[block.attrs.tone];
       return (

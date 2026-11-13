@@ -57,6 +57,23 @@
   color-scheme: dark;
 }
 
+/* ---------- Tono pastoral: LA VOZ DEL PASTOR ----------
+   Misma identidad del periódico, más cálida y contemplativa: papel más claro, oro suave,
+   sin rojo de "última hora". Se aplica con data-tone="pastoral" sobre la sección. */
+[data-tone='pastoral'] {
+  --surface: #f9f0dd;
+  --surface-raised: #fdf7ea;
+  --surface-sunken: #f1e3c4;
+  --fg: #2e2620;
+  --fg-muted: #6b5a49;
+  --rule: #9c7a3c;
+  --rule-soft: #e2cfa4;
+  --accent: #8a6a22;
+  --accent-fg: #fffaf0;
+  --focus: #8a6a22;
+  color-scheme: light;
+}
+
 @theme inline {
   --color-paper: var(--brand-paper);
   --color-ink: var(--brand-ink);
@@ -155,6 +172,20 @@
     background-color: var(--surface-sunken);
     background-image: radial-gradient(color-mix(in oklab, var(--fg) 14%, transparent) 1px, transparent 1.2px);
     background-size: 7px 7px;
+  }
+  .pastoral-prose {
+    @apply font-serif text-[1.1rem] leading-[1.8] sm:text-[1.2rem];
+  }
+  .pastoral-prose > * + * {
+    margin-top: 1.2em;
+  }
+  .pastoral-ornament {
+    @apply flex items-center gap-3 text-gold;
+  }
+  .pastoral-ornament::before,
+  .pastoral-ornament::after {
+    content: '';
+    @apply h-px flex-1 bg-current opacity-60;
   }
   .columns-news {
     column-gap: 1.75rem;

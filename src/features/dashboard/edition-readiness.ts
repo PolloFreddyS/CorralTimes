@@ -24,6 +24,8 @@ export function readinessInputFrom(
     lpSnapshotState: edition.lpSnapshotState,
     rankingState: edition.rankingState,
     rankingHasDuplicatePositions: new Set(positions).size !== positions.length,
+    pastoralState: edition.pastoralState,
+    pastoralPassageVerified: edition.pastoralPassageVerified,
     attachmentsMissing: 0,
     estimatedPages: estimatePages({
       main: count('PORTADA'),

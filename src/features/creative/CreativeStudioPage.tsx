@@ -6,6 +6,7 @@ import { ErrorState, LoadingRows } from '@/components/layout/QueryState';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Field, Input, NativeSelect, Textarea } from '@/components/ui/form';
+import { demoPastoralArchive } from '@/demo/fixtures';
 import { editionQuery, storiesQuery } from '@/lib/demo-queries';
 import { copyText, downloadText } from '@/lib/download';
 import { bibleToMarkdown, CREATIVE_BIBLE_V1 } from '@shared/creative/bible';
@@ -42,6 +43,7 @@ export function CreativeStudioPage() {
       exclusions: exclusions.split('\n').map((x) => x.trim()).filter(Boolean),
       references: [],
       ...(story?.exactQuote ? { quotes: [{ text: story.exactQuote, attribution: story.quoteAttribution ?? 'Sin atribución' }] } : {}),
+      ...(role === 'PASTORAL_ILLUSTRATION' && demoPastoralArchive[0] ? { scripture: { reference: demoPastoralArchive[0].verse, translation: demoPastoralArchive[0].translation, theme: demoPastoralArchive[0].theme } } : {}),
     };
   }, [edition.data, stories.data, story, role, composition, exactText, exclusions]);
 

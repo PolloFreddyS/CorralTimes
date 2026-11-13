@@ -9,6 +9,7 @@ export const PUBLIC_NAV = [
   { to: '/ediciones', label: 'Ediciones' },
   { to: '/bolsa-lp', label: 'Bolsa LP' },
   { to: '/power-rankings', label: 'Power Rankings' },
+  { to: '/la-voz-del-pastor', label: 'La Voz del Pastor' },
   { to: '/juegos', label: 'El Palabrero' },
   { to: '/archivo', label: 'Hemeroteca' },
   { to: '/enviar-noticia', label: 'Enviar noticia' },
