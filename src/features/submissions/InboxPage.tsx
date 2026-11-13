@@ -21,7 +21,7 @@ import { DEFAULT_FILTERS, filterSubmissions, type InboxFilters } from './filter'
 const STATUS_TONE: Record<SubmissionStatus, 'gold' | 'green' | 'redOutline' | 'muted' | 'neutral'> = {
   SUBMITTED: 'neutral',
   UNDER_REVIEW: 'gold',
-  NEEDS_INFO: 'gold',
+  NEEDS_INFORMATION: 'gold',
   APPROVED: 'green',
   REJECTED: 'redOutline',
   ARCHIVED: 'muted',

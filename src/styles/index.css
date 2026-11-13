@@ -28,6 +28,10 @@
   --green: var(--brand-green);
   --focus: var(--brand-red);
   --paper-texture-opacity: 0.35;
+  /* Gráficos: pareja ganancia/pérdida validada para daltonismo (ver docs/DESIGN_SYSTEM.md) */
+  --chart-gain: #1f6fa8;
+  --chart-loss: #b5452b;
+  --chart-grid: #d9c7a1;
   color-scheme: light;
 }
 
@@ -47,6 +51,9 @@
   --green: #8fa57f;
   --focus: var(--brand-gold);
   --paper-texture-opacity: 0;
+  --chart-gain: #3b8fd0;
+  --chart-loss: #d9694c;
+  --chart-grid: #3a312a;
   color-scheme: dark;
 }
 
@@ -70,6 +77,9 @@
   --color-gold-strong: var(--gold-strong);
   --color-green: var(--green);
   --color-focus: var(--focus);
+  --color-chart-gain: var(--chart-gain);
+  --color-chart-loss: var(--chart-loss);
+  --color-chart-grid: var(--chart-grid);
 
   --font-masthead: 'UnifrakturMaguntia', 'Old English Text MT', serif;
   --font-headline: 'Playfair Display Variable', 'Playfair Display', Georgia, serif;
@@ -129,6 +139,22 @@
   }
   .dropcap::first-letter {
     @apply font-headline float-left mr-2 text-5xl leading-[0.8] font-black text-accent;
+  }
+  /* Cuerpo de artículo: medida y ritmo cómodos para leer en el teléfono */
+  .article-prose {
+    @apply font-serif text-[1.075rem] leading-[1.7] sm:text-lg;
+  }
+  .article-prose > * + * {
+    margin-top: 1.1em;
+  }
+  .article-prose a {
+    @apply text-accent underline underline-offset-2;
+  }
+  /* Espacio de ilustración pendiente: trama de semitono sutil */
+  .halftone {
+    background-color: var(--surface-sunken);
+    background-image: radial-gradient(color-mix(in oklab, var(--fg) 14%, transparent) 1px, transparent 1.2px);
+    background-size: 7px 7px;
   }
   .columns-news {
     column-gap: 1.75rem;

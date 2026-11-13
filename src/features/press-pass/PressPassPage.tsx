@@ -11,13 +11,11 @@ import { apiFetch, ApiError, type IntakeStatus } from '@/lib/api';
 import { appConfig } from '@/lib/env';
 import { editionClock, localDateIn, NEWSROOM_TIME_ZONE } from '@shared/domain/edition-calendar';
 import {
-  buildSubmissionSchema,
   CATEGORY_LABELS,
   SUBMISSION_CATEGORIES,
   SUBMISSION_LIMITS,
-  type SubmissionInput,
-  type SubmissionPayload,
 } from '@shared/domain/submission';
+import { buildSubmissionSchema, type SubmissionInput, type SubmissionPayload } from '@shared/domain/submission-schema';
 
 type Receipt = { receipt: string; demo: boolean };
 
@@ -77,7 +75,7 @@ export function PressPassPage() {
   const closed = !appConfig.demoMode && intake.data && !intake.data.open;
 
   return (
-    <div>
+    <div className="mx-auto max-w-3xl">
       <NewspaperMasthead publicationDate={clock.publicationDate} />
       <section className="mt-5">
         <p className="kicker text-accent">Corral Press Pass</p>

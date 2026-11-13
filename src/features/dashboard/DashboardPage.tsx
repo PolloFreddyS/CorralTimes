@@ -58,7 +58,7 @@ export function DashboardPage() {
       <section aria-label="Estado del buzón" className="grid grid-cols-2 border-y-2 border-rule sm:grid-cols-3 lg:grid-cols-6">
         <Stat label="Total" value={subs.data.length} />
         <Stat label="Por revisar" value={byStatus('SUBMITTED') + byStatus('UNDER_REVIEW')} tone="gold" />
-        <Stat label="Falta info" value={byStatus('NEEDS_INFO')} tone="gold" />
+        <Stat label="Falta info" value={byStatus('NEEDS_INFORMATION')} tone="gold" />
         <Stat label="Aprobadas" value={byStatus('APPROVED')} tone="green" />
         <Stat label="Seleccionadas" value={stories.data.filter((s) => s.section).length} />
         <Stat label="Rechazadas" value={byStatus('REJECTED')} tone="red" />

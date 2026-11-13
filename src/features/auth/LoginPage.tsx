@@ -19,7 +19,7 @@ export function LoginPage() {
         <Button type="submit" className="w-full" disabled><KeyRound aria-hidden />Enviar enlace de acceso</Button>
       </form>
       <div className="mt-4"><PhaseNotice phase={2}>El inicio de sesión con Supabase Auth, la allowlist de administradores y MFA se implementan en la Fase 2.</PhaseNotice></div>
-      <p className="mt-6 text-center text-sm"><Link to="/" className="underline">Volver al Press Pass</Link></p>
+      <p className="mt-6 text-center text-sm"><Link to="/" className="underline">Volver al periódico</Link></p>
     </div>
   );
 }

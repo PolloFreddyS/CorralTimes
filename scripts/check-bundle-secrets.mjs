@@ -3,7 +3,7 @@
  * Inspecciona el bundle del navegador (dist/client) buscando credenciales privilegiadas.
  * Falla (exit 1) si encuentra algo. Se ejecuta en CI después de `vite build`.
  */
-import { readdirSync, readFileSync, statSync } from 'node:fs';
+import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs';
 import { join } from 'node:path';
 import { pathToFileURL } from 'node:url';
 
@@ -23,6 +23,17 @@ export function scanText(text) {
   return SECRET_PATTERNS.filter((p) => p.re.test(text)).map((p) => p.name);
 }
 
+/** Palabras que jamás deben aparecer en el bundle del navegador (respuestas de puzzles demo). */
+export function loadForbiddenWords(path = 'worker/demo/puzzle-secrets.json') {
+  if (!existsSync(path)) return [];
+  const data = JSON.parse(readFileSync(path, 'utf8'));
+  return (data.puzzles ?? []).map((p) => String(p.answer));
+}
+
+export function findForbiddenWords(text, words) {
+  return words.filter((w) => new RegExp(`\\b${w}\\b`, 'i').test(text));
+}
+
 function* walk(dir) {
   for (const entry of readdirSync(dir)) {
     const full = join(dir, entry);
@@ -33,20 +44,25 @@ function* walk(dir) {
 
 function main() {
   const root = join(process.argv[2] ?? 'dist', 'client');
+  const forbidden = loadForbiddenWords();
   let findings = 0;
   for (const file of walk(root)) {
     if (!/\.(js|mjs|css|html|json|map|txt)$/.test(file) && !file.endsWith('_headers')) continue;
-    const hits = scanText(readFileSync(file, 'utf8'));
-    for (const h of hits) {
+    const text = readFileSync(file, 'utf8');
+    for (const h of scanText(text)) {
       findings++;
       console.error(`✗ ${h} en ${file}`);
+    }
+    for (const w of findForbiddenWords(text, forbidden)) {
+      findings++;
+      console.error(`✗ Respuesta de puzzle "${w}" expuesta en ${file}`);
     }
   }
   if (findings) {
     console.error(`\n${findings} posible(s) secreto(s) en el bundle del navegador.`);
     process.exit(1);
   }
-  console.log(`✓ Bundle limpio: sin credenciales privilegiadas en ${root}`);
+  console.log(`✓ Bundle limpio: sin credenciales privilegiadas ni respuestas de puzzles (${forbidden.length}) en ${root}`);
 }
 
 if (import.meta.url === pathToFileURL(process.argv[1] ?? '').href) main();

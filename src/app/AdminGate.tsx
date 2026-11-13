@@ -26,7 +26,7 @@ export function AccessRequired() {
       <p className="mt-2 font-serif">La redacción es solo para la administración de EL CORRAL TIMES.</p>
       <div className="mt-6 flex justify-center gap-2">
         <Button asChild variant="ink"><Link to="/acceso">Acceso de editores</Link></Button>
-        <Button asChild variant="outline"><Link to="/">Reportar una noticia</Link></Button>
+        <Button asChild variant="outline"><Link to="/enviar-noticia">Reportar una noticia</Link></Button>
       </div>
     </div>
   );

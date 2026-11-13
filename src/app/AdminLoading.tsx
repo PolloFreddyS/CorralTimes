@@ -8,3 +8,12 @@ export function AdminLoading() {
     </div>
   );
 }
+
+/** Mientras se descarga una página pública diferida. */
+export function PublicLoading() {
+  return (
+    <div className="mx-auto max-w-6xl p-4">
+      <LoadingRows rows={5} />
+    </div>
+  );
+}
