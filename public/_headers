@@ -1,13 +1,20 @@
 # Cabeceras de seguridad para los assets estáticos (Cloudflare Workers Static Assets).
-# Las respuestas de /api/* reciben sus propias cabeceras desde el Worker.
+# Las páginas públicas con metadatos y /api/* reciben sus cabeceras desde el Worker
+# (worker/html/headers.ts y worker/middleware/security-headers.ts). Mantener sincronizado.
 /*
-  Content-Security-Policy: default-src 'self'; script-src 'self' https://challenges.cloudflare.com; frame-src https://challenges.cloudflare.com; connect-src 'self' https://*.supabase.co; img-src 'self' data: blob:; style-src 'self' 'unsafe-inline'; font-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests
+  Content-Security-Policy: default-src 'self'; script-src 'self' https://challenges.cloudflare.com; frame-src https://challenges.cloudflare.com; connect-src 'self' https://*.supabase.co; img-src 'self' data: blob: https://*.supabase.co; style-src 'self' 'unsafe-inline'; font-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests
   X-Content-Type-Options: nosniff
   X-Frame-Options: DENY
   Referrer-Policy: strict-origin-when-cross-origin
   Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=(), usb=()
   Strict-Transport-Security: max-age=63072000; includeSubDomains
   Cross-Origin-Opener-Policy: same-origin
+
+/redaccion/*
+  X-Robots-Tag: noindex, nofollow
+  Cache-Control: no-store
+
+/acceso
   X-Robots-Tag: noindex, nofollow
 
 /assets/*

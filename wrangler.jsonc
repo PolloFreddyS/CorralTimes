@@ -6,22 +6,26 @@
   "compatibility_flags": ["nodejs_compat"],
   "observability": { "enabled": true },
   "assets": {
+    "binding": "ASSETS",
     "not_found_handling": "single-page-application",
-    // La API siempre pasa por el Worker; todo lo demás son assets estáticos.
-    "run_worker_first": ["/api/*"]
+    // La API y las páginas públicas con metadatos Open Graph pasan por el Worker;
+    // el resto (JS, CSS, fuentes, rutas de HQ) se sirve directo como asset estático.
+    // Debe coincidir con HTML_ROUTE_PATTERNS en worker/html/pages.ts.
+    "run_worker_first": ["/api/*", "/", "/ediciones", "/ediciones/*", "/archivo", "/bolsa-lp", "/power-rankings", "/juegos", "/enviar-noticia"]
   },
   "vars": {
     "APP_ENV": "local",
-    "INTAKE_MODE": "not_configured"
+    "INTAKE_MODE": "not_configured",
+    "DEMO_CONTENT": "true"
   },
   "env": {
     "preview": {
       "name": "corral-times-hq-preview",
-      "vars": { "APP_ENV": "preview", "INTAKE_MODE": "not_configured" }
+      "vars": { "APP_ENV": "preview", "INTAKE_MODE": "not_configured", "DEMO_CONTENT": "false" }
     },
     "production": {
       "name": "corral-times-hq",
-      "vars": { "APP_ENV": "production", "INTAKE_MODE": "not_configured" }
+      "vars": { "APP_ENV": "production", "INTAKE_MODE": "not_configured", "DEMO_CONTENT": "false" }
     }
   }
 }

@@ -1,2 +1,7 @@
+# El periódico público es indexable; HQ, el formulario y la API no.
+# (Las páginas demo/preview además llevan <meta name="robots" content="noindex">.)
 User-agent: *
-Disallow: /
+Disallow: /redaccion
+Disallow: /acceso
+Disallow: /api/
+Disallow: /enviar-noticia
