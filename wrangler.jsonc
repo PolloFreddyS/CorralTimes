@@ -1,0 +1,27 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "corral-times-hq",
+  "main": "worker/index.ts",
+  "compatibility_date": "2026-10-01",
+  "compatibility_flags": ["nodejs_compat"],
+  "observability": { "enabled": true },
+  "assets": {
+    "not_found_handling": "single-page-application",
+    // La API siempre pasa por el Worker; todo lo demás son assets estáticos.
+    "run_worker_first": ["/api/*"]
+  },
+  "vars": {
+    "APP_ENV": "local",
+    "INTAKE_MODE": "not_configured"
+  },
+  "env": {
+    "preview": {
+      "name": "corral-times-hq-preview",
+      "vars": { "APP_ENV": "preview", "INTAKE_MODE": "not_configured" }
+    },
+    "production": {
+      "name": "corral-times-hq",
+      "vars": { "APP_ENV": "production", "INTAKE_MODE": "not_configured" }
+    }
+  }
+}

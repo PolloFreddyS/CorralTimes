@@ -1,0 +1,4 @@
+# Secretos del Worker para desarrollo local. Copia a .dev.vars (ignorado por git).
+# En preview/producción se configuran con `wrangler secret put NOMBRE`.
+SUPABASE_SERVICE_ROLE_KEY=placeholder
+TURNSTILE_SECRET_KEY=placeholder
