@@ -19,7 +19,8 @@
     "check:bundle": "node scripts/check-bundle-secrets.mjs dist",
     "check": "npm run typecheck && npm run lint && npm run test && npm run build && npm run check:bundle",
     "cf-typegen": "wrangler types worker/worker-configuration.d.ts",
-    "deploy:preview": "echo 'Despliegue deshabilitado hasta la Fase 9. Ver docs/DEPLOYMENT.md' && exit 1"
+    "deploy:preview": "echo 'Despliegue deshabilitado hasta la Fase 9. Ver docs/DEPLOYMENT.md' && exit 1",
+    "db:test": "scripts/db-test.sh"
   },
   "dependencies": {
     "@fontsource-variable/inter": "^5.3.0",
@@ -28,6 +29,7 @@
     "@fontsource/ibm-plex-mono": "^5.3.0",
     "@fontsource/unifrakturmaguntia": "^5.3.0",
     "@hookform/resolvers": "^5.9.2",
+    "@supabase/supabase-js": "^2.119.0",
     "@tanstack/react-query": "^5.107.1",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
