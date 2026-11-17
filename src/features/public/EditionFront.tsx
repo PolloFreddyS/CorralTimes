@@ -72,7 +72,7 @@ export function EditionFront({ edition: e }: { edition: PublicEdition }) {
         </section>
       )}
 
-      {e.pastoral ? <div className="my-8"><PastoralBand editionSlug={e.slug} preview={e.pastoral} /></div> : <div className="rule-double my-6" />}
+      <div className="rule-double my-6" />
 
       <div className="grid gap-8 lg:grid-cols-[2fr_1fr]">
         <div className="min-w-0 space-y-8">
@@ -158,7 +158,8 @@ export function EditionFront({ edition: e }: { edition: PublicEdition }) {
         </aside>
       </div>
 
-      <div className="rule-double my-6" />
+      {/* LA VOZ DEL PASTOR cierra la edición: la última sección, después de todas las noticias. */}
+      {e.pastoral ? <div className="mt-10 mb-6"><PastoralBand editionSlug={e.slug} preview={e.pastoral} /></div> : <div className="rule-double my-6" />}
       <section aria-label="Compartir y navegar" className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <ShareButtons title={`EL CORRAL TIMES N.º ${e.number}: ${e.headline}`} path={editionPath(e.slug)} />
         <div className="flex gap-2">

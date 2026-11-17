@@ -1,7 +1,7 @@
 /**
  * Columnas pastorales de DEMOSTRACIÓN.
- * - Filipenses 4:13 se cita LITERALMENTE de la Reina-Valera 1909 (dominio público). Aun así, en producción
- *   todo pasaje se verifica manualmente en la Mesa Pastoral antes de aprobar.
+ * - Filipenses 4:13 se cita LITERALMENTE de la Reina-Valera 1960 (traducción oficial de la sección).
+ *   En producción todo pasaje se verifica manualmente en la Mesa Pastoral antes de aprobar.
  * - Mateo 11:28 se presenta como PARÁFRASIS (sin comillas) para mostrar la distinción.
  * Las reflexiones son textos de muestra escritos con respeto; no sustituyen la voz pastoral real de la comunidad.
  */
@@ -14,7 +14,7 @@ export const DEMO_PASTORAL_E2: { slug: string; title: string; subtitle: string; 
   subtitle: 'Columna de muestra sobre Filipenses 4:13, el versículo que encabeza este periódico.',
   details: {
     reference: { bookCode: 'PHP', chapter: 4, verseStart: 13, verseEnd: 13 },
-    translationCode: 'RVR1909',
+    translationCode: 'RVR1960',
     passageMode: 'QUOTATION',
     passageText: 'Todo lo puedo en Cristo que me fortalece.',
     theme: 'Fortaleza',
@@ -25,7 +25,7 @@ export const DEMO_PASTORAL_E2: { slug: string; title: string; subtitle: string; 
     ],
     prayerInvitation: 'Te invitamos a dedicar un momento esta semana para orar por la paz y la salud de nuestra comunidad.',
     prayerPrivacy: 'NO_PRIVATE_REQUESTS',
-    verification: { verified: true, verifiedBy: 'demo', verifiedAt: '2026-11-12T12:00:00Z', source: 'Reina-Valera 1909 (texto de dominio público)' },
+    verification: { verified: true, verifiedBy: 'demo', verifiedAt: '2026-11-12T12:00:00Z', source: 'Reina-Valera 1960 (demo)' },
   },
   body: {
     type: 'doc',
@@ -44,14 +44,14 @@ export const DEMO_PASTORAL_E1: typeof DEMO_PASTORAL_E2 = {
   subtitle: 'Columna de muestra sobre Mateo 11:28 (presentado como paráfrasis).',
   details: {
     reference: { bookCode: 'MAT', chapter: 11, verseStart: 28, verseEnd: 28 },
-    translationCode: 'RVR1909',
+    translationCode: 'RVR1960',
     passageMode: 'PARAPHRASE',
     passageText: 'Jesús invita a quienes están cansados y agobiados a acercarse a Él para encontrar descanso.',
     theme: 'Paz',
     applications: ['Esta semana, apaga la pantalla un rato antes de dormir.'],
     prayerInvitation: null,
     prayerPrivacy: 'NO_PRIVATE_REQUESTS',
-    verification: { verified: true, verifiedBy: 'demo', verifiedAt: '2026-11-05T12:00:00Z', source: 'Paráfrasis revisada contra la Reina-Valera 1909' },
+    verification: { verified: true, verifiedBy: 'demo', verifiedAt: '2026-11-05T12:00:00Z', source: 'Paráfrasis revisada contra la Reina-Valera 1960 (demo)' },
   },
   body: {
     type: 'doc',

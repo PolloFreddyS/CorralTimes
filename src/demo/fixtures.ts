@@ -155,6 +155,6 @@ export const demoSecurityEvents: SecurityEvent[] = [
 
 /** Archivo pastoral DEMO para la Mesa Pastoral (títulos de muestra). */
 export const demoPastoralArchive = [
-  { id: 'pa-2', editionNumber: 2, publicationDate: '2026-11-13', title: 'La fuerza que no depende del marcador', reference: 'Filipenses 4:13 (RVR1909)', verse: 'Filipenses 4:13', translation: 'RVR1909', theme: 'Fortaleza', status: 'APPROVED' as const },
-  { id: 'pa-1', editionNumber: 1, publicationDate: '2026-11-06', title: 'Descanso para los cansados', reference: 'Mateo 11:28 (RVR1909, paráfrasis)', verse: 'Mateo 11:28', translation: 'RVR1909', theme: 'Paz', status: 'PUBLISHED' as const },
+  { id: 'pa-2', editionNumber: 2, publicationDate: '2026-11-13', title: 'La fuerza que no depende del marcador', reference: 'Filipenses 4:13 (RVR1960)', verse: 'Filipenses 4:13', translation: 'RVR1960', theme: 'Fortaleza', status: 'APPROVED' as const },
+  { id: 'pa-1', editionNumber: 1, publicationDate: '2026-11-06', title: 'Descanso para los cansados', reference: 'Mateo 11:28 (RVR1960, paráfrasis)', verse: 'Mateo 11:28', translation: 'RVR1960', theme: 'Paz', status: 'PUBLISHED' as const },
 ];

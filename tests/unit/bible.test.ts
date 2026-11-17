@@ -31,11 +31,11 @@ describe('referencias bíblicas', () => {
   it('formatea referencias de forma canónica', () => {
     expect(formatBibleReference({ bookCode: '1CO', chapter: 13, verseStart: 4, verseEnd: 7 })).toBe('1 Corintios 13:4–7');
   });
-  it('cada traducción declara licencia y titular', () => {
+  it('solo se usa la Reina-Valera 1960, con licencia y titular declarados', () => {
     for (const t of BIBLE_TRANSLATIONS) {
       expect(t.holder.length).toBeGreaterThan(3);
       expect(t.maxQuotedVerses).toBeGreaterThan(0);
     }
-    expect(BIBLE_TRANSLATIONS.find((t) => t.code === 'RVR1909')?.license).toBe('PUBLIC_DOMAIN');
+    expect(BIBLE_TRANSLATIONS.map((t) => t.code)).toEqual(['RVR1960']);
   });
 });

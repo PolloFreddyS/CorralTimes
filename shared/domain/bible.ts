@@ -137,9 +137,10 @@ export const REFERENCE_ERROR_LABELS: Record<ReferenceError, string> = {
 };
 
 /**
- * Traducciones registradas. Los datos de derechos son informativos y deben confirmarse con cada editorial
- * antes de producción (ver docs/PASTORAL.md). La política de la app limita las citas de traducciones con
- * derechos de autor a pasajes breves con aviso de traducción; no es asesoría legal.
+ * Traducción oficial de la sección: SOLO Reina-Valera 1960 (decisión editorial del dueño).
+ * Tiene derechos de autor: la app limita las citas a pasajes breves con aviso de traducción.
+ * Antes de producción, confirmar los términos de cita y el texto exacto del aviso con la editorial
+ * (ver docs/PASTORAL.md). No es asesoría legal.
  */
 export interface BibleTranslation {
   code: string;
@@ -151,12 +152,9 @@ export interface BibleTranslation {
 }
 
 export const BIBLE_TRANSLATIONS: readonly BibleTranslation[] = [
-  { code: 'RVR1909', name: 'Reina-Valera 1909', license: 'PUBLIC_DOMAIN', holder: 'Dominio público', maxQuotedVerses: 30 },
-  { code: 'RVR1960', name: 'Reina-Valera 1960', license: 'COPYRIGHTED', holder: 'Sociedades Bíblicas en América Latina; renovado por Sociedades Bíblicas Unidas', maxQuotedVerses: 10 },
-  { code: 'NVI', name: 'Nueva Versión Internacional', license: 'COPYRIGHTED', holder: 'Biblica, Inc.', maxQuotedVerses: 10 },
-  { code: 'NTV', name: 'Nueva Traducción Viviente', license: 'COPYRIGHTED', holder: 'Tyndale House Foundation', maxQuotedVerses: 10 },
-  { code: 'LBLA', name: 'La Biblia de las Américas', license: 'COPYRIGHTED', holder: 'The Lockman Foundation', maxQuotedVerses: 10 },
-  { code: 'DHH', name: 'Dios Habla Hoy', license: 'COPYRIGHTED', holder: 'Sociedades Bíblicas Unidas', maxQuotedVerses: 10 },
+  { code: 'RVR1960', name: 'Reina-Valera 1960', license: 'COPYRIGHTED', holder: 'Sociedades Bíblicas en América Latina, 1960; renovado © Sociedades Bíblicas Unidas, 1988', maxQuotedVerses: 10 },
 ];
+
+export const DEFAULT_TRANSLATION_CODE = 'RVR1960';
 
 export const findTranslation = (code: string) => BIBLE_TRANSLATIONS.find((t) => t.code === code) ?? null;

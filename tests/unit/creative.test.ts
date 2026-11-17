@@ -59,11 +59,11 @@ describe('anuncio de WhatsApp', () => {
 });
 
 describe('brief de ilustración pastoral', () => {
-  const pastoral = buildCreativeBrief({ ...base, role: 'PASTORAL_ILLUSTRATION', article: undefined, quotes: undefined, lpFigures: undefined, scripture: { reference: 'Filipenses 4:13', translation: 'RVR1909', theme: 'Fortaleza' } });
+  const pastoral = buildCreativeBrief({ ...base, role: 'PASTORAL_ILLUSTRATION', article: undefined, quotes: undefined, lpFigures: undefined, scripture: { reference: 'Filipenses 4:13', translation: 'RVR1960', theme: 'Fortaleza' } });
   it('declara que no es satírico e incluye la referencia sin pedir texto en la imagen', () => {
     expect(pastoral).toContain('LA VOZ DEL PASTOR');
     expect(pastoral).toContain('NO es satírica');
-    expect(pastoral).toContain('Filipenses 4:13 (RVR1909)');
+    expect(pastoral).toContain('Filipenses 4:13 (RVR1960)');
     expect(pastoral).toContain('El texto del versículo NO se escribe en la imagen.');
     expect(pastoral).toContain('Caricaturizar o ridiculizar');
     expect(pastoral).toContain('3:2');

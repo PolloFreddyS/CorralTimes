@@ -30,9 +30,10 @@ additional passage, which must be marked as a quotation or a paraphrase. The ill
 | The app never generates Bible text | no code path creates verse text |
 
 ## Translations & copyright
-Registered translations: RVR1909 (public domain), RVR1960, NVI, NTV, LBLA, DHH (all copyrighted).
+**The section uses only the Reina-Valera 1960 (RVR1960)**, by the owner's editorial decision. It is the only entry in
+`BIBLE_TRANSLATIONS`, and any other translation code is rejected.
 
-The app policy allows at most **10 consecutive quoted verses per column** for copyrighted translations, and 30 for RVR1909.
+RVR1960 is copyrighted, so the app allows at most **10 consecutive quoted verses per column**.
 A copyright notice is always shown. **This is not legal advice.** Before production, the owner should confirm each publisher's
 quotation terms (and the exact notice wording) and adjust `BIBLE_TRANSLATIONS`.
 
@@ -42,7 +43,7 @@ gave explicit permission (consent recorded). The public contract omits the priva
 reader account and no prayer-request intake in this release.
 
 ## Public experience
-* **Front page band:** placed right after the lead story, in a distinct warm style, showing the verse + reference + translation,
+* **Front page band:** the **last section of the edition**, after all the news, in a distinct warm style, showing the verse + reference + translation,
   the title, and a link.
 * **Full column** at `/ediciones/:edition/:slug`. Order: header ornament, theme/date, title, the week's passage, illustration,
   reflection, "Para vivirlo esta semana", "Invitación a orar", translation notice.
@@ -76,5 +77,5 @@ and adds pastoral prohibitions: no caricature of sacred figures, no memes/LP/gam
 and no invented verses. It carries the verified reference, never the verse text.
 
 ## Demo content
-The demo shows Filipenses 4:13 quoted from the **Reina-Valera 1909 (public domain)** and Mateo 11:28 as a **paraphrase**.
+The demo shows Filipenses 4:13 quoted from the **Reina-Valera 1960** and Mateo 11:28 as a **paraphrase**.
 The reflections are respectful sample texts, marked as samples.

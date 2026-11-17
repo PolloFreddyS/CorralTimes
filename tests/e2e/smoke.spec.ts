@@ -78,7 +78,7 @@ test.describe('La Voz del Pastor', () => {
     await expect(band).toContainText('Filipenses 4:13');
     await band.getByRole('link', { name: /leer la reflexión completa/i }).click();
     await expect(page.getByRole('heading', { level: 1, name: 'La fuerza que no depende del marcador' })).toBeVisible();
-    await expect(page.getByText(/Reina-Valera 1909 \(dominio público\)/)).toBeVisible();
+    await expect(page.getByText(/Texto bíblico tomado de la Reina-Valera 1960/)).toBeVisible();
     await expect(page.getByText(/no texto bíblico/)).toBeVisible();
     await noOverflow(page);
     await page.getByRole('link', { name: /reflexiones anteriores/i }).click();

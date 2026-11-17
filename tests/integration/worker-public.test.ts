@@ -50,7 +50,7 @@ describe('La Voz del Pastor — API pública', () => {
   it('lista el archivo pastoral publicado', async () => {
     const { columns } = await (await get('/api/public/pastoral')).json();
     expect(columns.length).toBe(2);
-    expect(columns[0]).toMatchObject({ referenceLabel: 'Filipenses 4:13 (RVR1909)', bookCode: 'PHP', theme: 'Fortaleza' });
+    expect(columns[0]).toMatchObject({ referenceLabel: 'Filipenses 4:13 (RVR1960)', bookCode: 'PHP', theme: 'Fortaleza' });
     expect(await (await get('/api/public/pastoral', env({ APP_ENV: 'production' }))).json()).toEqual({ columns: [] });
   });
   it('la edición trae el avance pastoral y la sátira no lo incluye en relacionados', async () => {
@@ -60,13 +60,13 @@ describe('La Voz del Pastor — API pública', () => {
     const satire = await (await get(`/api/public/editions/${latest.slug}/articles/${latest.articles[0].slug}`)).json();
     expect(satire.related.every((r: { category: string }) => r.category !== 'PASTORAL')).toBe(true);
     const col = await (await get(`/api/public/editions/${latest.slug}/articles/${latest.pastoral.articleSlug}`)).json();
-    expect(col.article.pastoral.translationNotice).toContain('Reina-Valera 1909');
+    expect(col.article.pastoral.translationNotice).toContain('Reina-Valera 1960');
     expect(col.related).toEqual([]);
   });
   it('la página pastoral tiene metadatos propios', async () => {
     const latest = await (await get('/api/public/editions/latest')).json();
     const html = await (await get(`/ediciones/${latest.slug}/${latest.pastoral.articleSlug}`)).text();
-    expect(html).toContain('La Voz del Pastor · Filipenses 4:13 (RVR1909)');
+    expect(html).toContain('La Voz del Pastor · Filipenses 4:13 (RVR1960)');
     expect(await (await get('/la-voz-del-pastor')).text()).toContain('<title>La Voz del Pastor — EL CORRAL TIMES</title>');
   });
 });

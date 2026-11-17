@@ -3,7 +3,7 @@ import { canApprovePastoral, toPublicPastoralDetails, validatePastoralDraft, typ
 
 const ok: PastoralDraft = {
   referenceInput: 'Filipenses 4:13',
-  translationCode: 'RVR1909',
+  translationCode: 'RVR1960',
   passageMode: 'QUOTATION',
   passageText: 'Todo lo puedo en Cristo que me fortalece.',
   title: 'Título',
@@ -30,9 +30,10 @@ describe('Mesa Pastoral — reglas editoriales', () => {
     expect(blockers({ ...ok, passageMode: 'PARAPHRASE', passageText: '“Todo lo puedo”' })).toContain('passageText');
     expect(blockers({ ...ok, passageMode: 'PARAPHRASE', verified: false, passageText: 'Pablo dice que Cristo le da fuerza.' })).toEqual([]);
   });
-  it('limita los versículos citados de traducciones con derechos', () => {
-    expect(blockers({ ...ok, translationCode: 'RVR1960', referenceInput: 'Salmo 119:1-20' })).toContain('passageText');
-    expect(blockers({ ...ok, translationCode: 'RVR1960', referenceInput: 'Salmo 23:1-6' })).toEqual([]);
+  it('limita los versículos citados de la RVR1960 (derechos de autor)', () => {
+    expect(blockers({ ...ok, referenceInput: 'Salmo 119:1-20' })).toContain('passageText');
+    expect(blockers({ ...ok, referenceInput: 'Salmo 23:1-6' })).toEqual([]);
+    expect(blockers({ ...ok, translationCode: 'RVR1909' })).toContain('translationCode');
   });
   it('referencias o traducciones inválidas bloquean', () => {
     expect(blockers({ ...ok, referenceInput: 'Filipenses 9:1' })).toContain('referenceInput');
