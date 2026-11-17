@@ -1,18 +1,31 @@
 import { Lock } from 'lucide-react';
-import { Link, Outlet } from 'react-router';
+import { Link, Navigate, Outlet } from 'react-router';
 import { useDocumentMode } from './theme';
+import { AdminLoading } from './AdminLoading';
 import { NewspaperMasthead } from '@/components/editorial';
 import { Button } from '@/components/ui/button';
+import { AdminSessionProvider, useAdminSession } from '@/features/auth/session';
 import { appConfig } from '@/lib/env';
 
 /**
- * Puerta de la redacción. Falla cerrado: fuera de modo demo, y mientras no exista autenticación
- * (Fase 2), NO se renderiza ninguna pantalla administrativa. La autorización real se aplica en el
- * servidor; esta puerta solo evita mostrar UI vacía o engañosa.
+ * Puerta de la redacción. La autorización real se aplica en el servidor (Worker + RLS);
+ * esta puerta solo decide qué mostrar. Modo demo (solo desarrollo): sin autenticación y con datos ficticios.
  */
 export function AdminGate() {
   if (appConfig.demoMode) return <Outlet />;
-  return <AccessRequired />;
+  return (
+    <AdminSessionProvider>
+      <GateInner />
+    </AdminSessionProvider>
+  );
+}
+
+function GateInner() {
+  const { state } = useAdminSession();
+  if (state.status === 'loading') return <AdminLoading />;
+  if (state.status === 'ready') return <Outlet />;
+  if (state.status === 'unconfigured' || state.status === 'error') return <AccessRequired />;
+  return <Navigate to="/acceso" replace />;
 }
 
 export function AccessRequired() {

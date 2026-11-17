@@ -25,7 +25,7 @@ export default tseslint.config(
     },
   },
   {
-    files: ['tests/**', 'src/app/**', 'src/components/editorial/**', 'src/components/ui/**', 'src/components/newspaper/**', 'src/features/public/**'],
+    files: ['tests/**', 'src/app/**', 'src/components/editorial/**', 'src/components/ui/**', 'src/components/newspaper/**', 'src/features/public/**', 'src/features/auth/**'],
     rules: { 'react-refresh/only-export-components': 'off' },
   },
 );

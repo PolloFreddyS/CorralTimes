@@ -21,7 +21,7 @@ export function ErrorState({ error }: { error: unknown }) {
         <p className="font-semibold">{notConfigured ? 'Fuente de datos no configurada' : 'No pudimos cargar esta sección'}</p>
         <p className="text-sm text-fg-muted">
           {notConfigured
-            ? 'La conexión con la base de datos se habilita en la Fase 2. No se muestran datos ficticios fuera del modo demo.'
+            ? 'Esta sección se conecta a la base de datos en una fase posterior. No se muestran datos ficticios fuera del modo demo.'
             : 'Intenta de nuevo en unos segundos.'}
         </p>
       </div>

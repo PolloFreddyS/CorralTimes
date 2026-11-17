@@ -1,4 +1,4 @@
-import { Menu, Moon, Newspaper, X } from 'lucide-react';
+import { LogOut, Menu, Moon, Newspaper, X } from 'lucide-react';
 import { useState } from 'react';
 import { NavLink, Outlet, useLocation } from 'react-router';
 import { useDocumentMode, useTheme } from '@/app/theme';
@@ -6,6 +6,8 @@ import { brand } from '@/branding/brand.config';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/cn';
 import { DemoBanner } from './DemoBanner';
+import { useOptionalAdminSession } from '@/features/auth/session';
+import { appConfig } from '@/lib/env';
 import { ADMIN_NAV } from './nav';
 
 function NavList({ onNavigate }: { onNavigate?: () => void }) {
@@ -38,13 +40,15 @@ export function AdminLayout() {
   useDocumentMode(mode);
   const [open, setOpen] = useState(false);
   const location = useLocation();
+  const session = useOptionalAdminSession();
+  const who = session?.state.status === 'ready' ? session.state.displayName : null;
 
   return (
     <div className="flex min-h-dvh flex-col">
       <a href="#contenido" className="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-50 focus:bg-accent focus:px-3 focus:py-2 focus:text-accent-fg">
         Saltar al contenido
       </a>
-      <DemoBanner />
+      {appConfig.demoMode && <DemoBanner />}
       <header className="sticky top-0 z-30 border-b-2 border-rule bg-surface/95 backdrop-blur">
         <div className="flex h-14 items-center gap-3 px-3 sm:px-5">
           <Button variant="ghost" size="icon" className="lg:hidden" aria-label={open ? 'Cerrar menú' : 'Abrir menú'} aria-expanded={open} aria-controls="admin-drawer" onClick={() => setOpen((v) => !v)}>
@@ -55,6 +59,12 @@ export function AdminLayout() {
             <span className="kicker hidden text-gold sm:inline">HQ · Redacción</span>
           </NavLink>
           <div className="ml-auto flex items-center gap-2">
+            {who && <span className="hidden text-sm text-fg-muted md:inline">{who}</span>}
+            {session && (
+              <Button variant="ghost" size="sm" onClick={() => void session.signOut()} aria-label="Cerrar sesión">
+                <LogOut /><span className="hidden sm:inline">Salir</span>
+              </Button>
+            )}
             <Button variant="outline" size="sm" onClick={toggle} aria-label={mode === 'newsroom' ? 'Cambiar a modo periódico' : 'Cambiar a modo redacción'}>
               {mode === 'newsroom' ? <Newspaper /> : <Moon />}
               <span className="hidden sm:inline">{mode === 'newsroom' ? 'Modo periódico' : 'Modo redacción'}</span>

@@ -9,6 +9,9 @@ const KIND_LABELS: Record<SecurityEvent['kind'], string> = {
   ADMIN_CHANGE: 'Cambio administrativo',
   INTEGRATION_FAILURE: 'Fallo de integración',
   ALERT: 'Alerta',
+  PUBLICATION: 'Publicación',
+  AI_GENERATION: 'Generación IA',
+  RETENTION: 'Retención',
 };
 
 const dt = new Intl.DateTimeFormat('es-DO', { dateStyle: 'medium', timeStyle: 'short', timeZone: 'America/Santo_Domingo' });
