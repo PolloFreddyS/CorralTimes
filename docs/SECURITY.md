@@ -19,7 +19,7 @@ who can craft any request, upload hostile files, scrape public APIs and brute-fo
 | T7 | XSS via articles | Closed article schema, renderer that only knows listed nodes, `safeHref` (http/https/mailto), lint ban on `dangerouslySetInnerHTML` | ✅ tests |
 | T8 | HTML or metadata injection in OG tags | All values HTML-escaped and clipped | ✅ test |
 | T9 | CSRF / cross-origin writes | `Origin` must match on non-GET requests. No CORS headers | ✅ |
-| T10 | Privilege escalation / self-made admin | UUID allowlist, provisioning-only inserts, RLS `is_admin()`, MFA (AAL2) for sensitive operations | ⏳ P2 |
+| T10 | Privilege escalation / self-made admin | UUID allowlist, provisioning only via SQL editor (`private.provision_admin`, capped at 2), RLS `is_admin_aal2()` on every editorial table, no self sign-up, MFA required for all HQ access | ✅ SQL tests + Worker tests |
 | T11 | Malicious uploads | Magic-byte sniffing, size limits, private staging bucket, server paths, public derivatives only after approval, metadata stripping | 🟡 sniffing ✅, ⏳ P3/P6 |
 | T12 | Secret leakage | Only `VITE_*` public vars. Bundle scanner covers Supabase service role/secret keys, Anthropic/OpenAI-style keys, Riot keys, Turnstile secrets, private keys and DB URLs | ✅ |
 | T13 | OpenAI key misuse / cost abuse | Server-only key, explicit admin action, budget caps, audit log | ⏳ P10 |

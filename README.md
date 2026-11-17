@@ -18,6 +18,8 @@ npm install
 npm run dev            # http://localhost:5173 — Vite + real workerd runtime, demo content ON
 npm run check          # typecheck + lint + tests + build + bundle secret/answer scan
 npm run test:e2e       # Playwright, desktop + mobile
+DATABASE_URL=… npm run db:test   # migrations + RLS tests on an empty Postgres 16
+VITE_DEMO_MODE=false npm run dev # real HQ login against Supabase (see docs/ADMIN_SETUP.md)
 ```
 
 | Route | |
@@ -34,7 +36,7 @@ Check the link preview metadata with `curl -s localhost:5173/ | grep og:`.
 [Architecture](docs/ARCHITECTURE.md) · [Design system](docs/DESIGN_SYSTEM.md) · [Security](docs/SECURITY.md) ·
 [Database](docs/DATABASE.md) · [Editorial workflow](docs/EDITORIAL_WORKFLOW.md) · [Creative Studio](docs/CREATIVE_STUDIO.md) ·
 [LP market](docs/LP_MARKET.md) · [Word game](docs/WORD_GAME.md) · [Publishing](docs/PUBLISHING.md) ·
-[La Voz del Pastor](docs/PASTORAL.md) · [Deployment](docs/DEPLOYMENT.md) · [Roadmap](docs/ROADMAP.md)
+[La Voz del Pastor](docs/PASTORAL.md) · [Admin setup (Supabase)](docs/ADMIN_SETUP.md) · [Deployment](docs/DEPLOYMENT.md) · [Roadmap](docs/ROADMAP.md)
 
 ## Branding
 No official logo is in the repo. To add one, put it in `public/brand/` and set `logo.src` in `src/branding/brand.config.ts`.

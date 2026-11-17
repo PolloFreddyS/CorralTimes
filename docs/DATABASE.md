@@ -1,4 +1,6 @@
-# Database (Supabase Postgres — Phase 2)
+# Database (Supabase Postgres)
+
+Implemented in `supabase/migrations/` (apply in order; see ADMIN_SETUP.md). Tested with `npm run db:test`.
 
 Conventions for every table:
 * `id uuid default gen_random_uuid()` and server-set `created_at`/`updated_at`.

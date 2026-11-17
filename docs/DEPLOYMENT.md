@@ -10,7 +10,8 @@
 
 | Secret | Phase |
 |---|---|
-| `SUPABASE_SERVICE_ROLE_KEY` | 2 |
+| `SUPABASE_URL`, `SUPABASE_PUBLISHABLE_KEY` | 2 — public, already in `wrangler.jsonc` vars |
+| `SUPABASE_SECRET_KEY` (service role) | 3 — only for the public submission path and retention job |
 | `SUPABASE_JWT` JWKS URL (non-secret) | 2 |
 | `TURNSTILE_SECRET_KEY` | 3 |
 | `OPENAI_API_KEY` (optional) | 10 |

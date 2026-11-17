@@ -35,7 +35,7 @@ Repo assessed (earlier prototype absorbed into 2.0, no official logo found). Arc
 - [x] Public: front-page band (separate from satire), full column with applications, prayer invitation, translation notice; `/la-voz-del-pastor` archive filterable by book/theme/year; own OG metadata
 - [x] HQ: **Mesa Pastoral** (live validation, book autocomplete, preview = the public component, archive), nav entry
 - [x] Readiness: pastoral check (optional; blocker if unapproved/unverified) · Creative Studio: `PASTORAL_ILLUSTRATION` with reverent tone rules
-- [x] Tests: 122 Vitest + 22 Playwright passing
+- [x] Tests: 122 Vitest + 22 Playwright passing (at that checkpoint)
 
 ## V2 consolidation ✅
 - [x] Product identity is 2.0 everywhere (package `corral-times@2.0.0`, Worker `corral-times`, page titles)
@@ -43,5 +43,16 @@ Repo assessed (earlier prototype absorbed into 2.0, no official logo found). Arc
 - [x] Readiness includes V2 checks: approved cover artwork, El Palabrero, La Voz del Pastor
 - [x] HQ phase labels follow the V2 roadmap
 
-## Phase 2+
+## Phase 2 — Database & authentication ✅ (code) · ⏳ owner setup
+- [x] Versioned migrations (`supabase/migrations/`): 31 tables, enums, constraints, append-only and freeze triggers, pastoral publication guard
+- [x] RLS on every table, deny by default; `anon` has no table access; editorial access requires an admin **with MFA (aal2)**
+- [x] Admin allowlist by immutable UUID; provisioning only via `private.provision_admin` (SQL editor), capped at 2; all changes audited
+- [x] Storage buckets: `evidence` and `media-staging` private, `media-public` for approved derivatives only
+- [x] Worker: `/api/admin/*` verified via `current_admin()` RPC with the user's JWT (no secret key needed); 401/403 NOT_ADMIN/403 MFA_REQUIRED; `/api/public/config`
+- [x] HQ login: magic link (no self sign-up) + mandatory TOTP enrollment/verification; sign-in audited; Centro de Seguridad reads the real audit log
+- [x] Tests: 55 SQL assertions on a Supabase-like Postgres (`npm run db:test`, CI job) + 137 Vitest
+- [ ] **Owner:** apply migrations, auth settings, invite users, provision both admins → `docs/ADMIN_SETUP.md`
+- [ ] Live verification against the project (needs this environment's network to allow the Supabase host)
+
+## Phase 3+
 Not started. See `ROADMAP.md`.

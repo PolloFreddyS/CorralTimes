@@ -82,7 +82,10 @@ export type SecurityEventKind =
   | 'EXPORT'
   | 'ADMIN_CHANGE'
   | 'INTEGRATION_FAILURE'
-  | 'ALERT';
+  | 'ALERT'
+  | 'PUBLICATION'
+  | 'AI_GENERATION'
+  | 'RETENTION';
 
 export interface SecurityEvent {
   id: string;
