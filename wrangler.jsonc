@@ -16,16 +16,19 @@
   "vars": {
     "APP_ENV": "local",
     "INTAKE_MODE": "not_configured",
-    "DEMO_CONTENT": "true"
+    "DEMO_CONTENT": "true",
+    // Públicos por diseño (la seguridad la dan RLS + JWT). NUNCA poner aquí la secret/service_role key.
+    "SUPABASE_URL": "https://yekanuawkfhdolivbwax.supabase.co",
+    "SUPABASE_PUBLISHABLE_KEY": "sb_publishable_djOM3EZ7PgK0KFbl3GuYHw_5LIHCF9c"
   },
   "env": {
     "preview": {
       "name": "corral-times-preview",
-      "vars": { "APP_ENV": "preview", "INTAKE_MODE": "not_configured", "DEMO_CONTENT": "false" }
+      "vars": { "APP_ENV": "preview", "INTAKE_MODE": "not_configured", "DEMO_CONTENT": "false", "SUPABASE_URL": "https://yekanuawkfhdolivbwax.supabase.co", "SUPABASE_PUBLISHABLE_KEY": "sb_publishable_djOM3EZ7PgK0KFbl3GuYHw_5LIHCF9c" }
     },
     "production": {
       "name": "corral-times",
-      "vars": { "APP_ENV": "production", "INTAKE_MODE": "not_configured", "DEMO_CONTENT": "false" }
+      "vars": { "APP_ENV": "production", "INTAKE_MODE": "not_configured", "DEMO_CONTENT": "false", "SUPABASE_URL": "https://yekanuawkfhdolivbwax.supabase.co", "SUPABASE_PUBLISHABLE_KEY": "sb_publishable_djOM3EZ7PgK0KFbl3GuYHw_5LIHCF9c" }
     }
   }
 }

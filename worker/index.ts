@@ -1,6 +1,6 @@
 import { createApp } from './app';
 
-const app = createApp({ adminVerifier: null });
+const app = createApp({});
 
 export default {
   fetch(request, env, ctx) {

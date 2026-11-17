@@ -15,6 +15,16 @@ export interface Bindings {
   /** "true" solo en local/preview: sirve contenido público FICTICIO etiquetado como demo. */
   DEMO_CONTENT?: string;
   ASSETS?: AssetFetcher;
+  /** URL y clave PUBLICABLE de Supabase (públicas por diseño; la seguridad la dan RLS y el JWT). */
+  SUPABASE_URL?: string;
+  SUPABASE_PUBLISHABLE_KEY?: string;
+}
+
+export function supabaseConfig(env: Bindings): { url: string; publishableKey: string } | null {
+  const url = env.SUPABASE_URL?.trim();
+  const key = env.SUPABASE_PUBLISHABLE_KEY?.trim();
+  if (!url || !key || !/^https:\/\/[a-z0-9-]+\.supabase\.co$/.test(url)) return null;
+  return { url, publishableKey: key };
 }
 
 export function parseIntakeMode(value: string | undefined): IntakeMode {

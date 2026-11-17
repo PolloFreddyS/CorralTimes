@@ -56,6 +56,7 @@ describe('API del Worker — Fase 1', () => {
 });
 
 describe('autorización de administradores (falla cerrado)', () => {
+  const ADMIN = { userId: '11111111-1111-4111-8111-111111111111', displayName: 'Dueño', token: 't' };
   it('sin verificador configurado, toda ruta admin responde 401 aunque traiga token', async () => {
     const app = createApp({ adminVerifier: null });
     for (const auth of [undefined, 'Bearer cualquier-cosa', 'Bearer eyJhbGciOiJub25lIn0.eyJyb2xlIjoiYWRtaW4ifQ.']) {
@@ -68,16 +69,29 @@ describe('autorización de administradores (falla cerrado)', () => {
     const throwing: AdminVerifier = async () => {
       throw new Error('boom');
     };
-    const res = await req(createApp({ adminVerifier: throwing }), '/api/admin/me', { headers: { Authorization: 'Bearer x' } });
-    expect(res.status).toBe(401);
+    expect((await req(createApp({ adminVerifier: throwing }), '/api/admin/me', { headers: { Authorization: 'Bearer x' } })).status).toBe(401);
   });
 
-  it('solo una identidad verificada accede, identificada por UUID inmutable', async () => {
-    const verifier: AdminVerifier = async (h) => (h === 'Bearer valid' ? { userId: '11111111-1111-4111-8111-111111111111', aal: 'aal2' } : null);
+  it('usuario válido que no es admin → 403 NOT_ADMIN', async () => {
+    const res = await req(createApp({ adminVerifier: async () => ({ kind: 'not_admin' }) }), '/api/admin/me');
+    expect(res.status).toBe(403);
+    expect((await res.json()).error.code).toBe('NOT_ADMIN');
+  });
+
+  it('admin sin MFA (aal1) → 403 MFA_REQUIRED', async () => {
+    const res = await req(createApp({ adminVerifier: async () => ({ kind: 'admin', identity: { ...ADMIN, aal: 'aal1' } }) }), '/api/admin/me');
+    expect(res.status).toBe(403);
+    expect((await res.json()).error.code).toBe('MFA_REQUIRED');
+  });
+
+  it('solo una identidad verificada con MFA accede, identificada por UUID inmutable', async () => {
+    const verifier: AdminVerifier = async (h) => (h === 'Bearer valid' ? { kind: 'admin', identity: { ...ADMIN, aal: 'aal2' } } : { kind: 'invalid' });
     const app = createApp({ adminVerifier: verifier });
     expect((await req(app, '/api/admin/me', { headers: { Authorization: 'Bearer forged' } })).status).toBe(401);
     const ok = await req(app, '/api/admin/me', { headers: { Authorization: 'Bearer valid' } });
     expect(ok.status).toBe(200);
-    expect(await ok.json()).toEqual({ userId: '11111111-1111-4111-8111-111111111111' });
+    const body = await ok.json();
+    expect(body).toEqual({ userId: ADMIN.userId, displayName: 'Dueño', aal: 'aal2' });
+    expect(JSON.stringify(body)).not.toContain('token');
   });
 });
